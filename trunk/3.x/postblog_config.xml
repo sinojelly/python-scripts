@@ -1,11 +1,15 @@
 <?xml version="1.0"?>
 <config>
     <fileserver>
+        <name>sinojelly.20x.cc</name>
+        <system>wordpress</system>
         <posturl>http://sinojelly.20x.cc/xmlrpc.php</posturl>
         <username>admin</username>
         <password>B78b9z24</password>
+        <postblog>true</postblog>
     </fileserver>
-    <blog name="wordpress@sinojelly.20x.cc">
+    <blog name="sinojelly.20x.cc">
+        <system>wordpress</system>
         <posturl>http://sinojelly.20x.cc/xmlrpc.php</posturl>
         <username>admin</username>
         <password>B78b9z24</password>
