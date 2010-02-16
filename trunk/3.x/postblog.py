@@ -8,6 +8,7 @@
 # 2010.2.15 support wordpress new post, including upload media file.
 # 2010.2.16 support get title from html file.
 # 2010.2.16 support get fileserver from config file and upload images &post blog on it.
+# 2010.2.16 support get blogs from config file and post blog on them.
 #
 
 import xmlrpc.client
@@ -98,6 +99,12 @@ def post_blog(config_file, data_file, html_filename):
     if fileserver['postblog'] == 'true':
     	new_id = blog.new_post(content)
     	print ("Post successful on %s. postid: %s."  %(fileserver['name'], new_id))
+
+    blogs = postblog_config.get_blogs(config_file)
+    for blogparam in blogs :
+        blog = pyblog.WordPress(blogparam['posturl'], blogparam['username'], blogparam['password'])
+        new_id = blog.new_post(content)
+        print ("Post successful on %s. postid: %s."  %(blogparam['name'], new_id))
 
 ##	return new_id
 

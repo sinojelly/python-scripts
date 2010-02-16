@@ -29,26 +29,24 @@ def get_fileserver(config_file) :
         children = nodes[0].getchildren()
         return children_dic(children)
 
-def get_blogs():
+def get_blogs(config_file):
     """
     Get blogs parameters.
 
-    dic_blog[blog_name] = {'system':'wordpress', 'posturl':url, 'username':usr, 'password':pass, 'upload':'false'}
-    node.items() is : [('name', 'sinojelly.20x.cc')]
-    node.items()[0][1] is the real name.
+    list_blog[0] = [{'name':'servername', 'system':'wordpress', 'posturl':url, 'username':usr, 'password':pass, 'upload':'false'}]
     Returns:
-        Dictionary of blogs parameters(system/posturl/username/password/upload) dictionary.
+        List of blogs parameters(system/posturl/username/password/upload) dictionary.
     """
     tree = lxml.etree.parse(config_file)
     nodes = tree.xpath('/config/blog')
-    dic_blog = {}
+    list_blog = []
     for node in nodes :
         children = node.getchildren()
-        dic_blog[node.items()[0][1]] = children_dic(children)
-    return dic_blog
+        list_blog.append(children_dic(children))
+    return list_blog
 
 
-##print(get_fileserver())
+##print(get_blogs("postblog_config.xml"))
 
 ##print(nodes)
 ##print(nodes.__class__)
