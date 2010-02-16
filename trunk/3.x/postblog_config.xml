@@ -1,0 +1,14 @@
+<?xml version="1.0"?>
+<config>
+    <fileserver>
+        <posturl>http://sinojelly.20x.cc/xmlrpc.php</posturl>
+        <username>admin</username>
+        <password>B78b9z24</password>
+    </fileserver>
+    <blog name="wordpress@sinojelly.20x.cc">
+        <posturl>http://sinojelly.20x.cc/xmlrpc.php</posturl>
+        <username>admin</username>
+        <password>B78b9z24</password>
+        <upload>false</upload>
+    </blog>
+</config>

@@ -6,6 +6,7 @@
 # version 1.0
 # 2010.2.15 support convert wizknowedge html file index.html to body only content.
 # 2010.2.15 support wordpress new post, including upload media file.
+# 2010.2.16 support get title from html file.
 #
 #
 
@@ -32,13 +33,14 @@ def get_html_content(filename):
 	html_file_content = p.sub("",html_file_content)
 
 	#去掉头
-	p = re.compile(r'<!DOCTYPE HTML PUBLIC.*<BODY>',re.S)
-	html_file_content = p.sub("",html_file_content)
+	p = re.compile(r'<!DOCTYPE HTML PUBLIC.*<TITLE>(.*)</TITLE>.*<BODY>',re.S)
+	html_file_title = p.match(html_file_content).group(1)
+	html_file_body = p.sub("",html_file_content)
 
 	#去掉尾
 	p = re.compile(r'</BODY>.*</HTML>',re.S)
-	html_file_content = p.sub("",html_file_content)
-	return html_file_content
+	html_file_body = p.sub("",html_file_body)
+	return html_file_title, html_file_body
 
 def upload_img(blog, imgname):
 	file = open(imgname, "rb")
@@ -48,7 +50,6 @@ def upload_img(blog, imgname):
 	if imgname[-3:] == 'png':
 		type = 'image/png'
 	media_obj = {'name':imgname, 'type':type, 'bits':content}
-	print(media_obj)
 	return blog.new_media_object(media_obj)
 
 def proc_imgs(blog, content):
@@ -59,28 +60,26 @@ def proc_imgs(blog, content):
 	for match in iterator:
 		img_list.append(match.group(1))
 		imgurl = upload_img(blog, match.group(1))
-		#print(imgurl)
 		p = re.compile(match.group(1),re.S|re.I)
 		content = p.sub(imgurl['url'], content)  #替换html文件中的img图片路径为网络路径
-	print(img_list)
 	return content
 
 def post_test(blog):
-	#print(blog.list_methods2());
-	#print(blog.method_help('metaWeblog.newPost'))
-	#print(blog.method_signature('metaWeblog.newPost'))
-	#print(blog.get_capabilities())
+	print(blog.list_methods2());
+	print(blog.method_help('metaWeblog.newPost'))
+	print(blog.method_signature('metaWeblog.newPost'))
+	print(blog.get_capabilities())
 	print(blog.method_signature('metaWeblog.newMediaObject'))
-	#print(blog.get_recent_posts());
+	print(blog.get_recent_posts());
 
 def post_blog(posturl, username, password, filename):
 	blog = pyblog.WordPress(posturl, username, password)
 
-	html_file_content = get_html_content(filename)
-	html_file_content = proc_imgs(blog, html_file_content)
+	html_file_title, html_file_body = get_html_content(filename)
+	html_file_body = proc_imgs(blog, html_file_body)
 
-	content = {"description":html_file_content, "title":"Test python xml-rpc 英语非中文标题"}
-	new_id = blog.new_post(content) #, blogid=479153);
+	content = {"description":html_file_body, "title":html_file_title}
+	new_id = blog.new_post(content)
 	print ("Post successful. postid: " + new_id)
 	return new_id
 
@@ -88,16 +87,7 @@ def post_blog(posturl, username, password, filename):
 def main(posturl, username, password, filename):
     return post_blog(posturl, username, password, filename)
 
-##posturl='http://sinojelly.20x.cc/xmlrpc.php'
-##username='admin'
-##password='B78b9z24'
-##
-##posturl ="http://blog.sinojelly.dreamhosters.com/xmlrpc.php"
-##username='admin'
-##password='87345465'
-##
-##filename="index.html"
-##main(posturl, username, password, filename)
+
 
 if   __name__  ==  "__main__":
     if len(sys.argv) < 5:
@@ -105,5 +95,13 @@ if   __name__  ==  "__main__":
     print(sys.argv[1])
     main(sys.argv[1], sys.argv[2], sys.argv[3], sys.argv[4])
 
-#blog = pyblog.WordPress(posturl, username, password)
-#post_test(blog)
+
+
+#test blog
+##blog = pyblog.WordPress(posturl, username, password)
+##post_test(blog)
+
+#test get html title
+##title, body = get_html_content("test/index.html")
+##print(title)
+
