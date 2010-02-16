@@ -9,6 +9,7 @@
 # 2010.2.16 support get title from html file.
 # 2010.2.16 support get fileserver from config file and upload images &post blog on it.
 # 2010.2.16 support get blogs from config file and post blog on them.
+# 2010.2.16 support each blog upload image as its own.
 #
 
 import xmlrpc.client
@@ -55,7 +56,7 @@ def upload_img(blog, imgname):
     media_obj = {'name':imgname, 'type':type, 'bits':content}
     return blog.new_media_object(media_obj)
 
-def proc_imgs(blog, config_file, img_list, content) :
+def proc_imgs(blog, img_list, content) :
     for img in img_list:
         imgurl = upload_img(blog, img)
         p = re.compile(img,re.S|re.I)
@@ -79,6 +80,12 @@ def post_test(blog):
 	print(blog.method_signature('metaWeblog.newMediaObject'))
 	print(blog.get_recent_posts());
 
+def post_imgs(blogparam, img_list, html_file_body):
+    print("Upload image files and replace content with image remote url...")
+    blog = pyblog.WordPress(blogparam['posturl'], blogparam['username'], blogparam['password'])
+    html_file_body = proc_imgs(blog, img_list, html_file_body)
+    return blog,html_file_body
+
 def post_blog(config_file, data_file, html_filename):
 	#blog = pyblog.WordPress(posturl, username, password)
 
@@ -89,22 +96,25 @@ def post_blog(config_file, data_file, html_filename):
     img_list = get_img_list(html_file_body)
     print(img_list)
 
-    print("Upload image files and replace content with image remote url...")
     fileserver = postblog_config.get_fileserver(config_file)
-    blog = pyblog.WordPress(fileserver['posturl'], fileserver['username'], fileserver['password'])
-    html_file_body = proc_imgs(blog, config_file, img_list, html_file_body)
+    blog,html_file_body_new = post_imgs(fileserver, img_list, html_file_body)
 
-    content = {"description":html_file_body, "title":html_file_title}
+    content_new = {"description":html_file_body_new, "title":html_file_title}
 
     if fileserver['postblog'] == 'true':
-    	new_id = blog.new_post(content)
-    	print ("Post successful on %s. postid: %s."  %(fileserver['name'], new_id))
+    	new_id = blog.new_post(content_new)
+    	print ("Post successful on %s. postid: %s.\r\n"  %(fileserver['name'], new_id))
 
     blogs = postblog_config.get_blogs(config_file)
     for blogparam in blogs :
-        blog = pyblog.WordPress(blogparam['posturl'], blogparam['username'], blogparam['password'])
-        new_id = blog.new_post(content)
-        print ("Post successful on %s. postid: %s."  %(blogparam['name'], new_id))
+        if blogparam['upload'] == 'true' : #该blog要上传自己的图片
+            blog,html_file_body_new2 = post_imgs(blogparam, img_list, html_file_body)
+            content_new2 = {"description":html_file_body_new2, "title":html_file_title}
+            new_id = blog.new_post(content_new2)
+        else :
+            blog = pyblog.WordPress(blogparam['posturl'], blogparam['username'], blogparam['password'])
+            new_id = blog.new_post(content_new)
+        print ("Post successful on %s. postid: %s.\r\n"  %(blogparam['name'], new_id))
 
 ##	return new_id
 
