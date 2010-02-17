@@ -23,14 +23,14 @@ class TestBlogConfig(unittest.TestCase):
                 <upload>false</upload>
             </blog>
         </config>'''
-    expect_fileserver = {\
+    expect_fileserver = [{\
         'name':'blog.sinojelly.dreamhosters.com',
         'system':'wordpress',
         'posturl':'https://storage.msn.com/storageservice/MetaWeblog.rpc',
         'username':'sinojellycn',
         'password':'123456',
         'postblog':'true',
-        }
+        }]
     expect_blogs = [{\
         'name':'sinojelly.20x.cc',
         'system':'wordpress',
