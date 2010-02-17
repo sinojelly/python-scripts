@@ -30,7 +30,7 @@ class NotFoundException(UserException):
 
     __str__ = UserException.__repr__
 
-class TooManyNodeException(UserException):
+class TooManyNodesException(UserException):
     def __init__(self):
         UserException.__init__(self, "Too many node found exception!")
 

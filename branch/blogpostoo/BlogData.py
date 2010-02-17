@@ -1,11 +1,151 @@
 import lxml.etree
+import XmlProc
 import UserException
 
 
 class BlogData:
-    def __init__(self, file):
-        self.file = file
+    def __init__(self, file = None, string = None):
+        if file :
+            self.file = file
+            try:
+                self.tree = lxml.etree.parse(file)
+            except:
+                self.tree = lxml.etree.fromstring('<data/>')  # if read file fail, create root data.
+        elif string :
+            self.tree = lxml.etree.fromstring(string)
+        else :
+            raise UserException.ParamException
 
 
+    def get_media_list(self, guid):
+        '''
+        Get media file(s).
+
+        Returns:
+        at least [{'local_path':'modify_time'}, {'local_path2':'modify_time2'}]
+        real return is much more
+        '''
+        html_node = self.get_html_node(guid)
+        media_node = self.get_media_node(html_node)
+        temp_string = lxml.etree.tostring(self.tree)
+        xml = XmlProc.XmlProc(in_string = temp_string)
+        return xml.get_dict_of_dict('/data/html_file[@wk_file_guid='+guid+']/media/file', 'local_path')
+
+    def update_media_file(self, guid, media_files):
+        '''
+        Update media file(s).
+
+        Args:
+        draft: media_files = {'local_path':['remote_path', 'modify_time', 'isAdd'], 'local_path2':['remote_path2', 'modify_time2', 'isAdd2']}
+        draft: isAdd is a bool value, True for add, False for update.
+        '''
+        html_node = self.get_html_node(guid)
+        media_node = self.get_media_node(html_node)
+        #remove all old content in media_node
+        media_node.clear()
+        temp_string = lxml.etree.tostring(self.tree)
+        xml = XmlProc.XmlProc(in_string = temp_string)
+        xml.add_children("/data/html_file[@wk_file_guid='"+guid+"']/media", 'file', media_files, 'local_path')
+        self.tree = xml.tree
+        pass
+
+    def get_blogs(self, guid) :
+        temp_string = lxml.etree.tostring(self.tree)
+        xml = XmlProc.XmlProc(in_string = temp_string)
+        return xml.get_dict_of_dict('/data/html_file[@wk_file_guid='+guid+']/blog', 'name')
+
+    def add_blog(self, guid, blog_name, postid, modify_time):
+        '''
+        Add blog record.
+
+        Args:
+        '''
+        html_node = self.get_html_node(guid)
+        blog_node = lxml.etree.Element('blog')
+        blog_node.set('name', blog_name)
+        temp_node = lxml.etree.Element('postid')
+        temp_node.text = postid
+        blog_node.append(temp_node)
+        temp_node = lxml.etree.Element('modify_time')
+        temp_node.text = modify_time
+        blog_node.append(temp_node)
+        html_node.append(blog_node)
+        pass
+
+    def update_blog(self, guid, blog_name, modify_time):
+        '''
+        Update blog record.
+
+        Args:
+        '''
+        html_node = self.get_html_node(guid)
+        blog_nodes = html_node.xpath("blog[@name='"+blog_name+"']")  #/data/html_file[@wk_file_guid=]/
+        blog_node = blog_nodes[0]
+        modify_time_nodes = blog_node.xpath('modify_time')
+        modify_time_node = modify_time_nodes[0]
+        modify_time_node.text = modify_time
+
+    def get_html_node(self, guid):
+        html_nodes = self.tree.xpath("//html_file[@wk_file_guid='"+guid+"']")
+        if not html_nodes :
+            html_node = lxml.etree.Element('html_file')
+            html_node.set('wk_file_guid', guid)
+            self.tree.append(html_node)
+        else :
+            if len(html_nodes) > 1:
+                raise UserException.TooManyNodesException
+            html_node = html_nodes[0]
+        return html_node
 
 
+    def get_media_node(self, html_node):
+        media_nodes = html_node.xpath("media")
+        if not media_nodes :
+            media_node = lxml.etree.Element('media')
+            html_node.append(media_node)
+        else :
+            if len(media_nodes) > 1:
+                raise UserException.TooManyNodesException
+            media_node = media_nodes[0]
+        return media_node
+
+    def write_file(self):
+        '''
+        Write xml data to file.
+
+        '''
+        file = open(self.file, 'w')
+        file.write(lxml.etree.tostring(self.tree))
+        file.close()
+
+
+#module test
+##data = BlogData('justtest.xml')
+##data.write_file()
+
+##father = lxml.etree.fromstring('<father/>')
+##me = lxml.etree.Element('me')
+##father.append(me)
+##brother = lxml.etree.Element('brother')
+##father.append(brother)
+##son = lxml.etree.Element('son')
+##me.append(son)
+##son2 = lxml.etree.Element('son')
+##brother.append(son2)
+##print(lxml.etree.tostring(father))
+##print(lxml.etree.tostring(me))
+##print(son)
+##print(son2)
+##nodes = me.xpath('/father/me/son')
+##print(nodes)
+##nodes = me.xpath('/me/son')
+##print(nodes)
+##nodes = me.xpath('son')
+##print(nodes)
+##nodes = me.xpath('/son')
+##print(nodes)
+##nodes = me.xpath('/')
+##print(nodes)
+##nodes = me.xpath('//son')
+##print(nodes)
+###nodes = me.xpath('') exception

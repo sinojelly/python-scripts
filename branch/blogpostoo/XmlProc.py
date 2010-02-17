@@ -13,8 +13,9 @@ class XmlProc:
             self.tree = lxml.etree.parse(in_file)
         elif in_string :
             self.tree = lxml.etree.fromstring(in_string)
-##        else :
-##            raise UserException.ParamException
+        else :
+            #raise UserException.ParamException
+            pass
 
     #---------------------------------------------------------------------------
     # Read xml compound nodes
@@ -74,7 +75,7 @@ class XmlProc:
         return dict
 
     #---------------------------------------------------------------------------
-    # Write xml compound nodes
+    # Write xml compound nodes (too complex to use)
     #---------------------------------------------------------------------------
     def set_root(self, root):
         '''
@@ -188,7 +189,7 @@ class XmlProc:
         if len(nodes) ==0 :
             raise UserException.NotFoundException
         elif len(nodes) > 1 :
-            raise UserException.TooManyNodeException
+            raise UserException.TooManyNodesException
         return nodes[0]
 
 #module test
