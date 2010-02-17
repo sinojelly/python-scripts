@@ -14,8 +14,8 @@ class BlogConfig:
         else :
             raise UserException.ParamException
 
-        self.fileserver = xml.get_children_text('/config/fileserver')
-        self.blogs = xml.get_children_text('/config/blog')
+        self.fileserver = xml.get_list_of_dict('/config/fileserver')
+        self.blogs = xml.get_list_of_dict('/config/blog')
 
     def get_fileserver(self) :
         """
