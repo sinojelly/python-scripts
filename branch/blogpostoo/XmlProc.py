@@ -51,7 +51,11 @@ class XmlProc:
         Returns:
             Dictionary of nodes' children tag/text dictionary.
         """
-        nodes = self.tree.xpath(node_path)     # nodes is a list, find the nodes with attribute attr_name
+        try:
+            nodes = self.tree.xpath(node_path)     # nodes is a list, find the nodes with attribute attr_name
+        except:
+            # no node_path found
+            return {}
         dict = {}
         for node in nodes :
             children = node.getchildren()

@@ -31,7 +31,7 @@ class BlogData:
         xml = XmlProc.XmlProc(in_string = temp_string)
         return xml.get_dict_of_dict('/data/html_file[@wk_file_guid='+guid+']/media/file', 'local_path')
 
-    def update_media_file(self, guid, media_files):
+    def update_media_files(self, guid, media_files):
         '''
         Update media file(s).
 
@@ -48,6 +48,41 @@ class BlogData:
         xml.add_children("/data/html_file[@wk_file_guid='"+guid+"']/media", 'file', media_files, 'local_path')
         self.tree = xml.tree
         pass
+
+    def update_node_text(self, parent_xpath, tag, text):
+        '''If not exist, create.'''
+
+        nodes = self.tree.xpath(parent_xpath + '/' + tag)
+
+        if not nodes: # not found
+            temp = lxml.etree.Element(tag)
+            temp.text = text
+            parent = self.tree.xpath(parent_xpath)
+            parent.append(temp)
+            return
+
+        # found
+        for node in nodes:
+            node.text = text
+
+    def update_media(self, guid, local_path, remote_path, modify_time):
+        '''
+        Update media file info.
+
+        Args:
+        '''
+        html_node = self.get_html_node(guid)
+        media_node = self.get_media_node(html_node)
+        file_nodes = media_node.xpath("/data/html_file[@wk_file_guid='"+guid+"']/media/file[@local_path='"+local_path+"']")
+        if not file_nodes : # not found that node
+            file_node = lxml.etree.Element('file')
+            file_node.set('local_path', local_path)
+            media_node.append(file_node)
+
+        self.update_node_text("/data/html_file[@wk_file_guid='"+guid+"']/media/file[@local_path='"+local_path+"']", 'remote_path', remote_path)
+        self.update_node_text("/data/html_file[@wk_file_guid='"+guid+"']/media/file[@local_path='"+local_path+"']", 'modify_time', modify_time)
+        #TODO: how to get child with sepcified tag?
+        return
 
     def get_blogs(self, guid) :
         temp_string = lxml.etree.tostring(self.tree)
@@ -149,3 +184,5 @@ class BlogData:
 ##nodes = me.xpath('//son')
 ##print(nodes)
 ###nodes = me.xpath('') exception
+
+

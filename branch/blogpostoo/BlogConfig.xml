@@ -3,11 +3,19 @@
     <fileserver>
         <name>blog.sinojelly.dreamhosters.com</name>
         <system>wordpress</system>
-        <posturl>https://storage.msn.com/storageservice/MetaWeblog.rpc</posturl>
-        <!--<posturl>http://sinojelly.blog.51cto.com/xmlrpc.php</posturl>-->
-        <!--<posturl>http://www.cnblogs.com/sinojelly/services/metablogapi.aspx</posturl>-->
-        <username>sinojellycn</username>
+        <posturl>http://blog.sinojelly.dreamhosters.com/xmlrpc.php</posturl>
+        <username>admin</username>
         <password>87345465</password>
         <postblog>true</postblog>
+        <media>2</media>
     </fileserver>
+    <blog>
+        <name>sinojelly.20x.cc</name>
+        <system>wordpress</system>
+        <posturl>http://sinojelly.20x.cc/xmlrpc.php</posturl>
+        <username>admin</username>
+        <password>B78b9z24</password>
+        <postblog>true</postblog>
+        <media>0</media>
+    </blog>
 </config>
