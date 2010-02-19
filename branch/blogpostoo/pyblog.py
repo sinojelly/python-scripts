@@ -55,7 +55,7 @@ class Blog(object):
 
         # Check if URL exists
         if not checkURL(serverapi):
-            raise BlogError('XML-RPC API URL not found.')
+            raise BlogError('XML-RPC API URL not found(Maybe network broken).')
 
         # Connect to the api. Call listMethods to keep a dictionary of available methods
         self.server             = xmlrpc.client.ServerProxy(serverapi, verbose=0)

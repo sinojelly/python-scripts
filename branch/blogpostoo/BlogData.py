@@ -1,3 +1,7 @@
+#!/usr/bin/python
+# coding=cp936
+# python 3.x
+
 import lxml.etree
 import XmlProc
 import UserException
@@ -25,11 +29,9 @@ class BlogData:
         at least [{'local_path':'modify_time'}, {'local_path2':'modify_time2'}]
         real return is much more
         '''
-        html_node = self.get_html_node(guid)
-        media_node = self.get_media_node(html_node)
         temp_string = lxml.etree.tostring(self.tree)
         xml = XmlProc.XmlProc(in_string = temp_string)
-        return xml.get_dict_of_dict('/data/html_file[@wk_file_guid='+guid+']/media/file', 'local_path')
+        return xml.get_dict_of_dict("/data/html_file[@wk_file_guid='"+guid+"']/media/file", 'local_path')
 
     def update_media_files(self, guid, media_files):
         '''
@@ -49,15 +51,26 @@ class BlogData:
         self.tree = xml.tree
         pass
 
+    def get_only_node(self, xpath):
+        nodes = self.tree.xpath(xpath)
+        if not nodes:
+            raise UserException.NotFoundException
+        elif len(nodes) > 1:
+            raise UserException.TooManyNodesException
+        return nodes[0]
+
     def update_node_text(self, parent_xpath, tag, text):
         '''If not exist, create.'''
 
-        nodes = self.tree.xpath(parent_xpath + '/' + tag)
+        try:
+            nodes = self.tree.xpath(parent_xpath + '/' + tag)
+        except:
+            pass
 
         if not nodes: # not found
             temp = lxml.etree.Element(tag)
             temp.text = text
-            parent = self.tree.xpath(parent_xpath)
+            parent = self.get_only_node(parent_xpath)
             parent.append(temp)
             return
 
@@ -81,13 +94,13 @@ class BlogData:
 
         self.update_node_text("/data/html_file[@wk_file_guid='"+guid+"']/media/file[@local_path='"+local_path+"']", 'remote_path', remote_path)
         self.update_node_text("/data/html_file[@wk_file_guid='"+guid+"']/media/file[@local_path='"+local_path+"']", 'modify_time', modify_time)
-        #TODO: how to get child with sepcified tag?
+        #how to get child with sepcified tag?
         return
 
     def get_blogs(self, guid) :
         temp_string = lxml.etree.tostring(self.tree)
         xml = XmlProc.XmlProc(in_string = temp_string)
-        return xml.get_dict_of_dict('/data/html_file[@wk_file_guid='+guid+']/blog', 'name')
+        return xml.get_dict_of_dict("/data/html_file[@wk_file_guid='"+guid+"']/blog", 'name')
 
     def add_blog(self, guid, blog_name, postid, modify_time):
         '''
@@ -125,7 +138,8 @@ class BlogData:
         if not html_nodes :
             html_node = lxml.etree.Element('html_file')
             html_node.set('wk_file_guid', guid)
-            self.tree.append(html_node)
+            root = self.tree.xpath("/data")[0]
+            root.append(html_node)
         else :
             if len(html_nodes) > 1:
                 raise UserException.TooManyNodesException
@@ -150,7 +164,7 @@ class BlogData:
 
         '''
         file = open(self.file, 'w')
-        file.write(lxml.etree.tostring(self.tree))
+        file.write(lxml.etree.tostring(self.tree).decode())
         file.close()
 
 

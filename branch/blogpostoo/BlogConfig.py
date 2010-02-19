@@ -1,4 +1,6 @@
-
+#!/usr/bin/python
+# coding=cp936
+# python 3.x
 
 import lxml.etree
 import XmlProc

@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <config>
-    <fileserver>
+    <blog>
         <name>blog.sinojelly.dreamhosters.com</name>
         <system>wordpress</system>
         <posturl>http://blog.sinojelly.dreamhosters.com/xmlrpc.php</posturl>
@@ -8,14 +8,14 @@
         <password>87345465</password>
         <postblog>true</postblog>
         <media>2</media>
-    </fileserver>
-    <blog>
+    </blog>
+    <fileserver>
         <name>sinojelly.20x.cc</name>
         <system>wordpress</system>
         <posturl>http://sinojelly.20x.cc/xmlrpc.php</posturl>
         <username>admin</username>
         <password>B78b9z24</password>
         <postblog>true</postblog>
-        <media>0</media>
-    </blog>
+        <media>2</media>
+    </fileserver>
 </config>
