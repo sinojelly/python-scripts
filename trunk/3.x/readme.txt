@@ -29,9 +29,12 @@
 需要先安装Python 3.1以上版本，并且把Python.exe所在目录添加到path变量中。
 1、修改配置文件blogconfig.xml，配置为自己的博客服务器、账户参数。
 2、运行命令：python.exe blogpost.py html_file file_guid [config_file data_file] (中括号内是可选参数)
+3、最好的使用方法是作为WizKnowedge插件使用，那么需要在%USERPROFILE%\My Documents\My Knowledge\Plugins目录创建新的目录“{A0D025CD-970A-4C62-97E4-5CF6F2C9DD6A}”，
+然后把代码库中“https://pyblogpost.googlecode.com/hg/trunk/3.x"所有代码下载到该目录。重新打开WizKnowedge，就可以看到插件菜单中多了一个”博文批量发布“。
+注意需要先修改blogconfig.xml中的服务器配置，再发布文章。
 
 说明：
-1、file_guid是html文件的唯一身份识别码，无论文章怎么修改都保持不变，也不会与别的文章重复。
+1、file_guid是html文件的唯一身份识别码，无论文章怎么修改都保持不变，也不会与别的文章重复。guid输入0时，工具会自动生成一个，并且保存在工具目录下的lastpost_guid.ini。
 2、为了能找到图片路径，如果发布文件为html，那么运行工具时的当前目录应该是html_file所在目录，特别是在html文件中以相对路径引用图片的情况下。
    如果发布的是ziw，则程序会自动解压缩到临时目录并且把当前目录切换到该临时目录。
 

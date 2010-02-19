@@ -215,7 +215,7 @@ hr {
             }
 
             //exec("python.exe \"D:\\Users\\Documents\\My Knowledge\\Plugins\\{A0D025CD-970A-4C62-97E4-5CF6F2C9DD6A}\\BlogPost.py\" \""+wiz_document.FileName+"\" 1234567890");
-            var ret = objCommon.RunExe("python.exe"," \"D:\\Users\\Documents\\My Knowledge\\Plugins\\{A0D025CD-970A-4C62-97E4-5CF6F2C9DD6A}\\BlogPost.py\" \""+wiz_document.FileName+"\" "+html_guid, true); 
+            var ret = objCommon.RunExe("python.exe"," \"%USERPROFILE%\\My Documents\\My Knowledge\\Plugins\\{A0D025CD-970A-4C62-97E4-5CF6F2C9DD6A}\\BlogPost.py\" \""+wiz_document.FileName+"\" "+html_guid, true); 
             if (0 == ret) {
 							  wiz_document.ParamValue("BatchPublishHtml_GUID") = objCommon.GetValueFromIni(command_file_name, "Common", "GUID");
             }  
