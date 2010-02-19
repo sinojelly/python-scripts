@@ -17,11 +17,11 @@ class TestBlogData(unittest.TestCase):
                 <media>
                     <file local_path="index123/a.jpg">
                         <remote_path>http://sinojelly.20x.cc/index123/a.jpg</remote_path>
-                        <modify_time>2010.2.18.00:40</modify_time>
+                        <file_hash>2010.2.18.00:40</file_hash>
                     </file>
                     <file local_path="index123/b.png">
                         <remote_path>http://sinojelly.20x.cc/index123/b.png</remote_path>
-                        <modify_time>2010.2.18.00:30</modify_time>
+                        <file_hash>2010.2.18.00:30</file_hash>
                     </file>
                 </media>
         </html_file>
@@ -34,40 +34,40 @@ class TestBlogData(unittest.TestCase):
                 <media>
                     <file local_path="index123/a.jpg">
                         <remote_path>http://sinojelly.20x.cc/index123/a.jpg</remote_path>
-                        <modify_time>2010.2.18.00:40</modify_time>
+                        <file_hash>2010.2.18.00:40</file_hash>
                     </file>
                     <file local_path="index123/b.png">
                         <remote_path>http://sinojelly.20x.cc/index123/b.png</remote_path>
-                        <modify_time>2010.2.18.00:30</modify_time>
+                        <file_hash>2010.2.18.00:30</file_hash>
                     </file>
                 </media>
                 <blog name="sinojelly.20x.cc">
                     <postid>10</postid>
-                    <modify_time>2010.2.18.00:30</modify_time>
+                    <file_hash>2010.2.18.00:30</file_hash>
                 </blog>
                 <blog name="sinojelly.dreamhost">
                     <postid>20</postid>
-                    <modify_time>2010.2.18.00:30</modify_time>
+                    <file_hash>2010.2.18.00:30</file_hash>
                 </blog>
         </html_file>
             <html_file wk_file_guid="456">
                 <media>
                     <file local_path="index456/a.jpg">
                         <remote_path>http://sinojelly.20x.cc/index456/a.jpg</remote_path>
-                        <modify_time>2010.2.18.00:40</modify_time>
+                        <file_hash>2010.2.18.00:40</file_hash>
                     </file>
                     <file local_path="index456/b.png">
                         <remote_path>http://sinojelly.20x.cc/index456/b.png</remote_path>
-                        <modify_time>2010.2.18.00:30</modify_time>
+                        <file_hash>2010.2.18.00:30</file_hash>
                     </file>
                 </media>
                 <blog name="sinojelly.20x.cc">
                     <postid>30</postid>
-                    <modify_time>2010.2.18.00:30</modify_time>
+                    <file_hash>2010.2.18.00:30</file_hash>
                 </blog>
                 <blog name="sinojelly.dreamhost">
                     <postid>40</postid>
-                    <modify_time>2010.2.18.00:30</modify_time>
+                    <file_hash>2010.2.18.00:30</file_hash>
                 </blog>
             </html_file>
     </data>
@@ -78,91 +78,91 @@ class TestBlogData(unittest.TestCase):
                 <media>
                     <file local_path="index123/a.jpg">
                         <remote_path>http://sinojelly.20x.cc/index123/a.jpg</remote_path>
-                        <modify_time>2010.2.18.00:40</modify_time>
+                        <file_hash>2010.2.18.00:40</file_hash>
                     </file>
                     <file local_path="index123/b.png">
                         <remote_path>http://sinojelly.20x.cc/index123/b.png</remote_path>
-                        <modify_time>2010.2.18.00:30</modify_time>
+                        <file_hash>2010.2.18.00:30</file_hash>
                     </file>
                 </media>
                 <blog name="sinojelly.20x.cc">
                     <postid>10</postid>
-                    <modify_time>2010.2.18.00:30</modify_time>
+                    <file_hash>2010.2.18.00:30</file_hash>
                 </blog>
                 <blog name="sinojelly.dreamhost">
                     <postid>20</postid>
-                    <modify_time>2010.2.18.00:30</modify_time>
+                    <file_hash>2010.2.18.00:30</file_hash>
                 </blog>
             </html_file>
             <html_file wk_file_guid="456">
                 <media>
                     <file local_path="index456/a.jpg">
                         <remote_path>http://sinojelly.20x.cc/index456/a.jpg</remote_path>
-                        <modify_time>2010.2.18.00:40</modify_time>
+                        <file_hash>2010.2.18.00:40</file_hash>
                     </file>
                     <file local_path="index456/b.png">
                         <remote_path>http://sinojelly.20x.cc/index456/b.png</remote_path>
-                        <modify_time>2010.2.18.00:30</modify_time>
+                        <file_hash>2010.2.18.00:30</file_hash>
                     </file>
                 </media>
                 <blog name="sinojelly.20x.cc">
                     <postid>30</postid>
-                    <modify_time>2010.2.18.00:30</modify_time>
+                    <file_hash>2010.2.18.00:30</file_hash>
                 </blog>
                 <blog name="sinojelly.dreamhost">
                     <postid>40</postid>
-                    <modify_time>2010.2.18.00:30</modify_time>
+                    <file_hash>2010.2.18.00:30</file_hash>
                 </blog>
             </html_file>
         <data>'''
     expect_media_list = {\
         "index123/a.jpg":{
         'remote_path':'http://sinojelly.20x.cc/index123/a.jpg',
-        'modify_time':'2010.2.18.00:40'},
+        'file_hash':'2010.2.18.00:40'},
         "index123/b.png":{
         'remote_path':'http://sinojelly.20x.cc/index123/b.png',
-        'modify_time':'2010.2.18.00:30'},
+        'file_hash':'2010.2.18.00:30'},
         }
     media_update = {\
         "index123/a.jpg":{
         'remote_path':'http://sinojelly.20x.cc/index123/a11.jpg',
-        'modify_time':'2010.2.18.10:40'},
+        'file_hash':'2010.2.18.10:40'},
         "index123/c.png":{
         'remote_path':'http://sinojelly.20x.cc/index123/c.png',
-        'modify_time':'2010.3.18.00:30'},
+        'file_hash':'2010.3.18.00:30'},
         }
 
     expect_blogs = { \
         "sinojelly.20x.cc":{
         'postid':'10',
-        'modify_time':'2010.2.18.00:30'},
+        'file_hash':'2010.2.18.00:30'},
         "sinojelly.dreamhost":{
         'postid':'20',
-        'modify_time':'2010.2.18.00:30'},
+        'file_hash':'2010.2.18.00:30'},
     }
 
     expect_blogs_after_add = { \
         "sinojelly.20x.cc":{
         'postid':'10',
-        'modify_time':'2010.2.18.00:30'},
+        'file_hash':'2010.2.18.00:30'},
         "sinojelly.dreamhost":{
         'postid':'20',
-        'modify_time':'2010.2.18.00:30'},
+        'file_hash':'2010.2.18.00:30'},
         "sinojellycn.live.space":{
         'postid':'100',
-        'modify_time':'2020.1.1.10:30'},
+        'file_hash':'2020.1.1.10:30'},
     }
 
     expect_blogs_after_update = { \
         "sinojelly.20x.cc":{
         'postid':'10',
-        'modify_time':'2010.2.18.00:30'},
+        'file_hash':'2010.2.18.00:30'},
         "sinojelly.dreamhost":{
         'postid':'20',
-        'modify_time':'2010.2.18.00:30'},
+        'file_hash':'2010.2.18.00:30'},
         "sinojellycn.live.space":{
         'postid':'100',
-        'modify_time':'2010.1.1.10:30'},
+        'file_hash':'2010.1.1.10:30'},
     }
 
     def test_get_media_list_1(self):
@@ -202,10 +202,10 @@ class TestBlogData(unittest.TestCase):
     expect_update_media = {\
         "index123/a.jpg":{
         'remote_path':'http://sinojelly.20x.cc/index123/a.jpg',
-        'modify_time':'2010.2.18.00:40'},
+        'file_hash':'2010.2.18.00:40'},
         "index123/b.png":{
         'remote_path':'http://localhost/a.png',
-        'modify_time':'2010.4.18.00:40'},
+        'file_hash':'2010.4.18.00:40'},
         }
     def test_update_media(self):
         data = BlogData.BlogData(string = self.data_xml2)

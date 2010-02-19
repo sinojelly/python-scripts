@@ -198,6 +198,9 @@ class XmlProc:
             raise UserException.TooManyNodesException
         return nodes[0]
 
+def cdata_text(text):
+    return "<![CDATA["+text+"]]>"
+
 #module test
 ##XmlProc(out_file = 'd.xml')
 ##XmlProc()
@@ -216,3 +219,13 @@ class XmlProc:
 ##html_file = lxml.etree.Element('html_file')
 ##root1.append(html_file)
 ##print(lxml.etree.tostring(root1))
+
+###test cdata (if text includes '<' or '>', cdata is needed.'/','\' not need.)
+##str = r"<data><![CDATA[te\s/t\text]]></data>"
+##str2 = r"<data>te\s/t\text</data>"
+##tree = lxml.etree.fromstring(str)
+##nodes = tree.xpath('/data')
+##print(nodes[0].text)
+##tree2 = lxml.etree.fromstring(str2)
+##nodes2 = tree.xpath('/data')
+##print(nodes2[0].text)

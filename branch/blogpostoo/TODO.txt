@@ -1,26 +1,23 @@
-1、get image list 时间太长。
-2、MIME类型太多，全加载没必要，浪费内存，可以再精选一部分。做成可扩展的，读xml文件。
-3、与WizKnowedge结合起来。
-4、解压缩时，能否保持解压缩后的文件的修改时间不变？（也可以先获取时间，然后设置修改时间）
-5、图片、index.html是否重传，采用根据hash值比较的方法判断。（采用可扩展的方式）MD5比CRC32还快，起码.NET下是如此。
-6、正则表达式匹配也可以做成可扩展，可以采用更多方式优化。
-7、调用add media的时候出现异常。应该加入多次尝试的等待。在config的全局配置中配置。（md5, media_list not re, 延迟多久尝试，尝试多少次, 链接失败如何尝试，上传文件/内容失败如何尝试，发送一个文件之后是否延时)
+
+
+支持metaweblog
+
+文章的分类。
+
+还需要验证guid作为文章唯一id，工具作为wk插件时，是否写blogdata.xml成功。
+
+较多的部分文章Post content的时候始终出现异常，WK没有问题。
+
+  File "D:\Users\Documents\My Knowledge\Plugins\{A0D025CD-970A-4C62-97E4-5CF6F2C9DD6A}\BlogPost.py", line 58, in new_post
+    return pyblog.WordPress.new_post(self, self.get_content(title, body))
+  File "D:\Users\Documents\My Knowledge\Plugins\{A0D025CD-970A-4C62-97E4-5CF6F2C9DD6A}\pyblog.py", line 197, in new_post
+    return self.execute('metaWeblog.newPost', blogid, self.username, self.password, content, publish)
+  File "D:\Users\Documents\My Knowledge\Plugins\{A0D025CD-970A-4C62-97E4-5CF6F2C9DD6A}\pyblog.py", line 138, in execute
+    r = getattr(self.server, methodname)(args)
+  File "C:\Python31\lib\xmlrpc\client.py", line 1029, in __call__
+    return self.__send(self.__name, args)
+  File "C:\Python31\lib\xmlrpc\client.py", line 1271, in __request
+    verbose=self.__verbose
+  File "C:\Python31\lib\xmlrpc\client.py", line 1065, in request
+    dict(resp.getheaders())
 xmlrpc.client.ProtocolError: <ProtocolError for sinojelly.20x.cc/xmlrpc.php: 500 Internal Server Error>
-
-
-
-
-
-如果每次更新html文件，所有图片的修改时间都会更新，则还是无法避免每次上传图片。除非根据图片文件名。
-
-
-
-ziw时间：
-1、打开ziw进入编辑状态再关闭，ziw的修改时间就改变。
-2、即使编辑了ziw文件，index.html的内容改变了，但是index.html时间不变。（一直保持为创建时间）
-
-
-class zipfile.ZipInfo([filename[, date_time]])?
-Class used to represent information about a member of an archive. Instances of this class are returned by the getinfo() and infolist() methods of ZipFile objects. Most users of the zipfile module will not need to create these, but only use those created by this module. filename should be the full name of the archive member, and date_time should be a tuple containing six fields which describe the time of the last modification to the file; the fields are described in section ZipInfo Objects.
-
-

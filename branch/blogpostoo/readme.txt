@@ -18,11 +18,14 @@
 8、文章无修改的时候，不更新也不发布文章。
 9、图片也是在有修改的时候，才重新上传，不会每次更新文章都把所有图片再上传一次。
 10、通过此工具上传的文件固定连接地址可以在WordPress插件slug的作用下自动改为易于识别的英文或者拼音，而不是数字。（WK自带的上传无此功能）
+11、根据MD5码是否相同判断文件是否有修改。
+12、html文件没修改，只修改图片，那么图片不会单独上传。
+13、可以修改MIME.xml以支持更多媒体文件类型。
 
 
 使用方法
 ===================
-需要先安装Python 3.1以上版本。
+需要先安装Python 3.1以上版本，并且把Python.exe所在目录添加到path变量中。
 1、修改配置文件blogconfig.xml，配置为自己的博客服务器、账户参数。
 2、运行命令：python.exe blogpost.py html_file file_guid [config_file data_file] (中括号内是可选参数)
 
@@ -72,12 +75,12 @@
         <media>
             <file local_path="">
                 <remote_path></remote_path>
-                <modify_time></modify_time>
+                <file_hash></file_hash>
             </file>
         </media>
         <blog name="">
             <postid></postid>
-            <modify_time></modify_time>  -- post file modify time
+            <file_hash></file_hash>  -- post file modify time
         </blog>
     </html_file>
 <data>
@@ -95,7 +98,9 @@ LiveSpace
 可改进点
 ===================
 1、支持除WordPress以外的博客服务器。（架构支持很方便的扩展）
-
+2、支持文章分类、标签。并且可以在指定某个博客固定使用的标签。
+3、少数时候会遇到图片上传失败，上传同样图片WizKnowedge自带插件也会失败。
+4、html文件解析是采用的正则表达式方式，可以考虑用lxml.html来解析，初步看一下似乎没有直接提供获得media列表的接口。（不过必要性不大，改进后的正则表达式少了很多.*，效率很高）
 
 
 开源项目路径：

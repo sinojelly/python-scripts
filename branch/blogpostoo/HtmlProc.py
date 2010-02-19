@@ -9,10 +9,10 @@ import Utility as u
 class HtmlProc:
     def __init__(self, file):
         self.media_files = []
-        self.media_times = {}
+        self.media_hashs = {}
         self.init_html_content(file)
         self.init_media_files()
-        self.html_time = u.get_modify_time(file)
+        self.html_hash = u.get_file_hash(file)
 
     def get_html_title(self):
         return self.html_title
@@ -21,11 +21,11 @@ class HtmlProc:
         '''Get html body without media path replaced.'''
         return self.html_body
 
-    def get_html_time(self):
-        return self.html_time
+    def get_html_hash(self):
+        return self.html_hash
 
-    def get_media_time(self, media):
-        return self.media_times[media]
+    def get_media_hash(self, media):
+        return self.media_hashs[media]
 
     def get_media_files(self):
         return self.media_files
@@ -39,13 +39,14 @@ class HtmlProc:
 
     	#大小写忽略，也可以用re.I
         u.print_t("Get media list...")
-        p = re.compile(r'''.*?<.*?IMG.*?src\s*=\s*"(.*?)".*?>.*?''',re.S|re.I)   #必须有前后的.*
+        ##p = re.compile(r'''.*?<.*?IMG.*?src\s*=\s*"(.*?)".*?>.*?''',re.S|re.I)   #some times, this is very slow. #必须有前后的.*
+        p = re.compile(r'''<IMG.*?src="(.*?)">''',re.S|re.I)
 
         iterator = p.finditer(self.html_body)
         for match in iterator:
             media = match.group(1)
             self.media_files.append(media)
-            self.media_times[media] = u.get_modify_time(media)
+            self.media_hashs[media] = u.get_file_hash(media)
 
     def init_html_content(self, filename):
         u.print_t("Parsing "+filename+" content...")

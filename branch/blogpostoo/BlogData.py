@@ -26,7 +26,7 @@ class BlogData:
         Get media file(s).
 
         Returns:
-        at least [{'local_path':'modify_time'}, {'local_path2':'modify_time2'}]
+        at least [{'local_path':'file_hash'}, {'local_path2':'file_hash2'}]
         real return is much more
         '''
         temp_string = lxml.etree.tostring(self.tree)
@@ -38,7 +38,7 @@ class BlogData:
         Update media file(s).
 
         Args:
-        draft: media_files = {'local_path':['remote_path', 'modify_time', 'isAdd'], 'local_path2':['remote_path2', 'modify_time2', 'isAdd2']}
+        draft: media_files = {'local_path':['remote_path', 'file_hash', 'isAdd'], 'local_path2':['remote_path2', 'file_hash2', 'isAdd2']}
         draft: isAdd is a bool value, True for add, False for update.
         '''
         html_node = self.get_html_node(guid)
@@ -78,7 +78,7 @@ class BlogData:
         for node in nodes:
             node.text = text
 
-    def update_media(self, guid, local_path, remote_path, modify_time):
+    def update_media(self, guid, local_path, remote_path, file_hash):
         '''
         Update media file info.
 
@@ -93,7 +93,7 @@ class BlogData:
             media_node.append(file_node)
 
         self.update_node_text("/data/html_file[@wk_file_guid='"+guid+"']/media/file[@local_path='"+local_path+"']", 'remote_path', remote_path)
-        self.update_node_text("/data/html_file[@wk_file_guid='"+guid+"']/media/file[@local_path='"+local_path+"']", 'modify_time', modify_time)
+        self.update_node_text("/data/html_file[@wk_file_guid='"+guid+"']/media/file[@local_path='"+local_path+"']", 'file_hash', file_hash)
         #how to get child with sepcified tag?
         return
 
@@ -102,7 +102,7 @@ class BlogData:
         xml = XmlProc.XmlProc(in_string = temp_string)
         return xml.get_dict_of_dict("/data/html_file[@wk_file_guid='"+guid+"']/blog", 'name')
 
-    def add_blog(self, guid, blog_name, postid, modify_time):
+    def add_blog(self, guid, blog_name, postid, file_hash):
         '''
         Add blog record.
 
@@ -114,13 +114,13 @@ class BlogData:
         temp_node = lxml.etree.Element('postid')
         temp_node.text = postid
         blog_node.append(temp_node)
-        temp_node = lxml.etree.Element('modify_time')
-        temp_node.text = modify_time
+        temp_node = lxml.etree.Element('file_hash')
+        temp_node.text = file_hash
         blog_node.append(temp_node)
         html_node.append(blog_node)
         pass
 
-    def update_blog(self, guid, blog_name, modify_time):
+    def update_blog(self, guid, blog_name, file_hash):
         '''
         Update blog record.
 
@@ -129,9 +129,9 @@ class BlogData:
         html_node = self.get_html_node(guid)
         blog_nodes = html_node.xpath("blog[@name='"+blog_name+"']")  #/data/html_file[@wk_file_guid=]/
         blog_node = blog_nodes[0]
-        modify_time_nodes = blog_node.xpath('modify_time')
-        modify_time_node = modify_time_nodes[0]
-        modify_time_node.text = modify_time
+        file_hash_nodes = blog_node.xpath('file_hash')
+        file_hash_node = file_hash_nodes[0]
+        file_hash_node.text = file_hash
 
     def get_html_node(self, guid):
         html_nodes = self.tree.xpath("//html_file[@wk_file_guid='"+guid+"']")

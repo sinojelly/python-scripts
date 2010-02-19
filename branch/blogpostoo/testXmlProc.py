@@ -1,6 +1,7 @@
 import unittest
 import lxml.etree
 import UserException
+import XmlProc
 
 
 class TestXmlProc(unittest.TestCase):

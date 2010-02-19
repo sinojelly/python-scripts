@@ -5,7 +5,7 @@
         <system>wordpress</system>
         <posturl>http://blog.sinojelly.dreamhosters.com/xmlrpc.php</posturl>
         <username>admin</username>
-        <password>87345465</password>
+        <password>123456</password>
         <postblog>true</postblog>
         <media>2</media>
     </blog>
@@ -14,7 +14,7 @@
         <system>wordpress</system>
         <posturl>http://sinojelly.20x.cc/xmlrpc.php</posturl>
         <username>admin</username>
-        <password>B78b9z24</password>
+        <password>123456</password>
         <postblog>true</postblog>
         <media>2</media>
     </fileserver>

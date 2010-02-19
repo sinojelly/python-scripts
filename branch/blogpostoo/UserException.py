@@ -39,5 +39,14 @@ class TooManyNodesException(UserException):
 
     __str__ = UserException.__repr__
 
+class TryTimeOutException(UserException):
+    def __init__(self):
+        UserException.__init__(self, "Try time out exception!")
+
+    def __repr__(self):
+        return UserException.msg
+
+    __str__ = UserException.__repr__
+
 ##print("eeeeeee")
 ##raise ParamException

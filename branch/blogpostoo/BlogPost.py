@@ -10,7 +10,16 @@ import HtmlProc
 import BlogConfig
 import BlogData
 import Utility as u
+import ToolDir
+import MIME
+import UserException
 
+# this python file's path
+tool_dir = ToolDir.get_main_dir()
+mime_config = MIME.MIME(tool_dir + os.path.sep + 'MIME.xml')
+
+def get_mime_type(suffix):
+    return mime_config.get_mime_type(suffix)
 
 class BlogDataX(BlogData.BlogData):
     '''encapsulation complex data structure'''
@@ -19,20 +28,20 @@ class BlogDataX(BlogData.BlogData):
         self.medias = BlogData.BlogData.get_media_list(self, guid)
         self.blogs = BlogData.BlogData.get_blogs(self, guid)
 
-    def get_blog_time(self, blog_name):
+    def get_blog_hash(self, blog_name):
         try:
             blog = self.blogs[blog_name]   #if dict has no key names blog_name, it is None? no, it's KeyErr exception
         except:
             return None
-        return blog['modify_time']
+        return blog['file_hash']
 
-    def get_media_time(self, media_name):
+    def get_media_hash(self, media_name):
         try:
             media = self.medias[media_name]
         except:
             return None
         if media:
-            return media['modify_time']
+            return media['file_hash']
     def get_postid(self, blog_name):
         try:
             blog = self.blogs[blog_name]   #if dict has no key names blog_name, it is None? no, it's KeyErr exception
@@ -55,17 +64,21 @@ class WordPressX(pyblog.WordPress):
         file = open(media, "rb")
         content = xmlrpc.client.Binary(file.read())  #base 64 encoding binary
         file.close()
-        type = 'image/jpeg'
-        if media[-3:] == 'png':
-            type = 'image/png'
-        elif media[-3:] == 'gif':
-            type = 'image/gif'
-        media_obj = {'name':media, 'type':type, 'bits':content}
-        return pyblog.WordPress.new_media_object(self, media_obj)
+        media_obj = {'name':media, 'type':get_mime_type(u.get_file_suffix(media)), 'bits':content}
+        try:
+            return u.try_exec(xmlrpc.client.ProtocolError, 2, 5, self.upload_media_func, media_obj)  # retry 2 times, delay 5 seconds to retry
+            ##return pyblog.WordPress.new_media_object(self, media_obj)
+        except UserException.TryTimeOutException as ex:
+            u.print_t(ex)
+            url = {'url': media}
+            return url  # upload media fail, return local path
 
     def get_content(self, title, body):
         content = {"description":body, "title":title}
         return content
+
+    def upload_media_func(self, param_tuple):
+        return pyblog.WordPress.new_media_object(self, param_tuple[0])
     pass
 
 class MetaWeblogX(pyblog.MetaWeblog):
@@ -101,11 +114,11 @@ class BlogPost:
         0 --  not post
         1 --  new post
         '''
-        new_time = self.html_proc.get_media_time(file)
-        old_time = self.data.get_media_time(file)  #time compare
-        if not old_time :  # have not post, it's None
+        new_hash = self.html_proc.get_media_hash(file)
+        old_hash = self.data.get_media_hash(file)  #time compare
+        if not old_hash :  # have not post, it's None
             return '1'
-        if new_time > old_time :
+        if new_hash != old_hash :
             return '1'
         return '0'
 
@@ -118,11 +131,11 @@ class BlogPost:
         1 --  new post
         2 --  update post
         '''
-        new_time = self.html_proc.get_html_time()
-        old_time = self.data.get_blog_time(blog_name)  #time compare
-        if not old_time :  # have not post, it's None
+        new_hash = self.html_proc.get_html_hash()
+        old_hash = self.data.get_blog_hash(blog_name)  #hash compare
+        if not old_hash :  # have not post, it's None
             return '1'
-        if new_time > old_time :
+        if new_hash != old_hash :
             return '2'
         return '0'
 
@@ -130,14 +143,14 @@ class BlogPost:
         html_body = self.post_medias(blog, server)
         u.print_t('Post content...')
         postid = blog.new_post(self.html_title, html_body)
-        self.data.add_blog(self.file_guid, server['name'], postid, self.html_proc.get_html_time())
+        self.data.add_blog(self.file_guid, server['name'], postid, self.html_proc.get_html_hash())
         pass
 
     def update_blog(self, blog, server):
         html_body = self.post_medias(blog, server)
         u.print_t('Post content...')
         blog.update_post(self.data.get_postid(server['name']), self.html_title, html_body)
-        self.data.update_blog(self.file_guid, server['name'], self.html_proc.get_html_time())
+        self.data.update_blog(self.file_guid, server['name'], self.html_proc.get_html_hash())
         pass
 
     def post(self):
@@ -190,7 +203,7 @@ class BlogPost:
             if self.should_post_media(media) == '1':
                 url = self.upload_media(blog, media)
                 html_body = self.html_proc.update_html_body(html_body, media, url)
-                self.data.update_media(self.file_guid, media, url, self.html_proc.get_media_time(media))  # update one media info to data file.
+                self.data.update_media(self.file_guid, media, url, self.html_proc.get_media_hash(media))  # update one media info to data file.
             else :
                 html_body = self.html_proc.update_html_body(html_body, media, self.data.get_media_list(self.file_guid)[media]['remote_path']) # update html_body's media path
         return html_body
@@ -214,11 +227,11 @@ def main():
     if html_file[-3:] == 'ziw':
         html_file = u.ziw2html(html_file)
 
-    if len(sys.argv) == 3:  # 前面改变了当前路径为临时目录，所以配置文件要使用绝对路径
-        config_file = cur_dir+ os.path.sep + 'blogconfig.xml'
-        data_file = cur_dir+ os.path.sep + 'blogdata.xml'
+    if len(sys.argv) == 3:  # default xml is in tool dir
+        config_file = tool_dir+ os.path.sep + 'blogconfig.xml'
+        data_file = tool_dir+ os.path.sep + 'blogdata.xml'
     if len(sys.argv) == 5:
-        config_file = cur_dir+ os.path.sep + sys.argv[3]  # 输入的blogconfig.xml等文件要是相对于刚开始运行时的相对路径
+        config_file = cur_dir+ os.path.sep + sys.argv[3]  # input xml path relative to run path
         data_file = cur_dir+ os.path.sep + sys.argv[4]
 
     if not os.path.isfile(config_file):
@@ -232,6 +245,6 @@ def main():
 
 if   __name__  ==  "__main__":
 ##    cur_dir = os.getcwd()
-##    ziw2html('test/Google小工具使用技巧.ziw')
+##    ziw2html('test/Google鐏忓繐浼愰崗铚傚▏閻劍濡у?ziw')
 ##    BlogPost('index.html', '35888c3d608ba32852d2e81836c764b8', cur_dir+ os.path.sep + 'blogconfig.xml', cur_dir+ os.path.sep + 'blogdata.xml').post()
     main()
