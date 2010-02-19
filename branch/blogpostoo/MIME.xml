@@ -1,0 +1,21 @@
+<?xml version="1.0"?>
+<config>
+    <mime suffix="jpg">
+       <mime_type>image/jpeg</mime_type>
+    </mime>
+    <mime suffix="jpeg">
+       <mime_type>image/jpeg</mime_type>
+    </mime>
+    <mime suffix="jpe">
+       <mime_type>image/jpeg</mime_type>
+    </mime>
+    <mime suffix="png">
+       <mime_type>image/png</mime_type>
+    </mime>
+    <mime suffix="pnz">
+       <mime_type>image/png</mime_type>
+    </mime>
+    <mime suffix="gif">
+       <mime_type>image/gif</mime_type>
+    </mime>
+</config>
