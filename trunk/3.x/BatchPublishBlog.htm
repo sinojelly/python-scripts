@@ -1,0 +1,237 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" >
+<head>
+    <title>Publish Document</title>
+    <style type="text/css">
+    body {
+	font-family: Arial, Helvetica,Sans-serif;
+	color: black;
+	background-color: #fff;
+	font-size: 10.5pt;
+	margin: 1em;
+	padding: 1em;
+	line-height: 1.5;
+}
+div {
+	font-size: 1em;
+}
+table {
+	empty-cells: show;
+	margin: 0;
+	padding: 0;
+}
+font {
+	font-size: 1em;
+}
+ul {
+	padding: 0 0 1em 1em;
+}
+ol {
+	padding: 0 0 1em 1.3em;
+}
+li {
+	line-height: 1.5em;
+	padding: 0 0 0 0;
+}
+p {
+	padding: 0;
+}
+h1, h2, h3, h4, h5 {
+	padding: 0;
+}
+h1 {
+	font-size: 1.3em; /*1.3em*/
+}
+h2 {
+	font-size: 1.1em; /*1.3em*/
+}
+h3 {
+	font-size: 1em; /*1.1em;*/;
+	line-height: 1.4em;
+	white-space: nowrap;
+	padding: 0;
+}
+h4, h5, table {
+	font-size: 1em;
+}
+sup, sub {
+	font-size: .7em;
+}
+input, select, textarea, option {
+	font-family: inherit;
+	font-size: inherit;
+	margin: 0;
+	padding: 0;
+}
+img {
+	border-style: none;
+}
+a {
+	outline: none;
+	color: #00c;
+}
+a:active {
+	color: red;
+}
+a:visited {
+	color: #551a8b;
+}
+hr {
+	border: 0;
+	background-color: #EEE;
+	border-bottom: #c9d7f1 1px solid;
+	height: 0px;
+	width: 99.9%;
+	text-align: left;
+	margin-top: 1em;
+	margin-bottom: 1em;
+}
+        #textAddress
+        {
+            width: 265px;
+        }
+        #textCategory
+        {
+            width: 265px;
+        }
+        #textPort
+        {
+            width: 60px;
+        }
+        #textImageWidth
+        {
+            width: 60px;
+        }
+        #selectAction
+        {
+            width: 265px;
+        }
+    </style>
+</head>
+<body>
+<table>
+	        <tr>
+            <td id="labelCategory" align="right">
+                Category</td>
+            <td>
+                <input id="textCategory" type="text" /></td>
+        </tr>
+</table>
+    <p align="right">
+ 
+        <input id="buttonOK" onclick="CloseDialog(1);" 
+            style="width: 70px; padding-top:3px;" type="button" value="OK" />&nbsp;
+        <input id="buttonCancel" onclick="CloseDialog(2);" 
+            style="width: 70px; padding-top:3px;" type="button" value="Cancel" />
+    </p>
+<script language="JavaScript" type="text/javascript">
+	
+    //
+    var objApp = new ActiveXObject("WizExplorer.WizExplorerApp");
+    var objCommon = new ActiveXObject("WizKMControls.WizCommonUI");
+
+    //
+    var database = objApp.Database;
+    //
+    //
+    var appGUID = objApp.GetPluginAppGUID(document);
+    //
+    //
+    var settings_meta = "BatchPublishHtml";
+    //
+    var selected_documents = objApp.Window.DocumentsCtrl.SelectedDocuments;
+    if (null == selected_documents
+        || selected_documents.Count == 0) {
+        alert(objApp.LoadPluginString(appGUID, "SelectOneDocument"));
+        CloseDialog(0);
+    }
+    else {
+        //
+        settings_meta = "BatchPublishHtml_" + selected_documents.Item(0).Parent.RootFolder.Name;
+        //
+        textCategory.value = database.Meta(settings_meta, "Category");
+
+    }
+    
+    //////////////////
+    function exec (command)
+ 
+  {  
+ 
+          window.oldOnError = window.onerror;  
+ 
+          window._command = command;  
+ 
+          window.onerror = function(err)
+ 
+          {  
+ 
+              if (err.indexOf('utomation') != -1)
+ 
+      {  
+ 
+                  alert('命令已经被用户禁止！');    
+ 
+                  return true;  
+ 
+              }  
+ 
+              else return false;  
+ 
+          };  
+ 
+          var wsh = new ActiveXObject('WScript.Shell');  
+ 
+          if (wsh)   {
+                     wsh.Run(command);  
+          }
+ 
+ 
+          window.onerror = window.oldOnError;
+          //alert(window.oldOnError); 
+ 
+  }  
+ 
+    //
+    function PublishDocuments() {    	        
+        var category = textCategory.value;
+        //
+        //save settings to database
+        database.Meta(settings_meta, "Category") = category;
+        //
+        var document_count = selected_documents.Count;
+        //
+        
+        for (var i = 0; i < document_count; i++) {
+            var wiz_document = selected_documents.Item(i);
+            if (null == wiz_document)
+                continue;
+            //alert(wiz_document.FileName);
+            
+            html_guid = wiz_document.ParamValue("BatchPublishHtml_GUID");
+            if (html_guid == "")
+            {
+            	  html_guid = "0";
+            }
+
+            //exec("python.exe \"D:\\Users\\Documents\\My Knowledge\\Plugins\\{A0D025CD-970A-4C62-97E4-5CF6F2C9DD6A}\\BlogPost.py\" \""+wiz_document.FileName+"\" 1234567890");
+            var ret = objCommon.RunExe("python.exe"," \"D:\\Users\\Documents\\My Knowledge\\Plugins\\{A0D025CD-970A-4C62-97E4-5CF6F2C9DD6A}\\BlogPost.py\" \""+wiz_document.FileName+"\" "+html_guid, true); 
+            if (0 == ret) {
+							  wiz_document.ParamValue("BatchPublishHtml_GUID") = objCommon.GetValueFromIni(command_file_name, "Common", "GUID");
+            }  
+        }
+    }
+    function CloseDialog(ret) {
+        if (ret == 1) {
+            PublishDocuments();
+        }
+        //
+        objApp.Window.CloseHtmlDialog(document, ret);
+    }
+    //
+    
+
+</script>    
+
+</body>
+</html>
