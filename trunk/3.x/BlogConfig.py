@@ -32,9 +32,9 @@ class BlogConfig:
         """
         Get blogs parameters.
 
-        list_blog[0] = [{'name':'servername', 'system':'wordpress', 'posturl':url, 'username':usr, 'password':pass, 'upload':'false'}]
+        list_blog[0] = [{'name':'servername', 'system':'wordpress', 'posturl':url, 'username':usr, 'password':pass, 'media':'0', 'categories':'Uncategorized'}]
         Returns:
-            List of blogs parameters(system/posturl/username/password/upload) dictionary.
+            List of blogs parameters(system/posturl/username/password/media/categories) dictionary.
         """
         return self.blogs
 

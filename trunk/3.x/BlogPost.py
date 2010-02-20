@@ -76,11 +76,11 @@ class WordPressX(pyblog.WordPress):
     def __init__(self, posturl, username, password):
         pyblog.WordPress.__init__(self, posturl, username, password)
 
-    def new_post(self, title, body):
-        return pyblog.WordPress.new_post(self, self.get_content(title, body))
+    def new_post(self, title, body, categories):
+        return pyblog.WordPress.new_post(self, self.get_content(title, body, categories))
 
-    def update_post(self, postid, title, body):
-        pyblog.WordPress.edit_post(self, postid, self.get_content(title, body))
+    def update_post(self, postid, title, body, categories):
+        pyblog.WordPress.edit_post(self, postid, self.get_content(title, body, categories))
 
     def upload_media(self, media):
         file = open(media, "rb")
@@ -95,12 +95,22 @@ class WordPressX(pyblog.WordPress):
             url = {'url': media}
             return url  # upload media fail, return local path
 
-    def get_content(self, title, body):
-        content = {"description":body, "title":title}
+    def get_content(self, title, body, categories):  # categories is strings seperated by ';', split to array of string
+        content = {"description":body, "title":title, "categories": self.get_active_categories(categories)}
         return content
 
     def upload_media_func(self, param_tuple):
         return pyblog.WordPress.new_media_object(self, param_tuple[0])
+
+    def get_active_categories(self, categories):
+        exist = []
+        try:
+            elems = pyblog.WordPress.get_categories(self)
+            for elem in elems:
+                exist.append(elem['categoryName'])
+        except:
+            u.print_t('Get exist categories fail!')
+        return u.get_intersection(exist, u.split_to_list(categories, ';', ''))   # jiao ji
     pass
 
 class MetaWeblogX(pyblog.MetaWeblog):
@@ -112,7 +122,7 @@ class BlogPost:
         'wordpress':WordPressX,
         'mediaweblog':MetaWeblogX,
     }
-    def __init__(self, html_file, html_file_guid, config_file, data_file):
+    def __init__(self, html_file, html_file_guid, categories, config_file, data_file):
 ##        try:
         self.servers_blog = {}
         self.html_proc = HtmlProc.HtmlProc(html_file)
@@ -123,6 +133,7 @@ class BlogPost:
         self.new_medias = self.html_proc.get_media_files()
         self.html_title = self.html_proc.get_html_title()
         self.html_body  = self.html_proc.get_html_body()
+        self.categories = categories
         fileserver = self.config.get_fileserver()
         blogs = self.config.get_blogs()
         self.servers = [fileserver[0]]
@@ -165,17 +176,25 @@ class BlogPost:
             return '2'
         return '0'
 
+    def get_categories(self, server):
+        categories = ""
+        if self.categories:
+            categories += self.categories + ";"
+        if server['categories']:
+            categories += server['categories']
+        return categories
+
     def new_blog(self, blog, server):
         html_body = self.post_medias(blog, server)
         u.print_t('Post content...')
-        postid = blog.new_post(self.html_title, html_body)
+        postid = blog.new_post(self.html_title, html_body, self.get_categories(server))
         self.data.add_blog(self.file_guid, server['name'], postid, self.html_proc.get_html_hash())
         pass
 
     def update_blog(self, blog, server):
         html_body = self.post_medias(blog, server)
         u.print_t('Post content...')
-        blog.update_post(self.data.get_postid(server['name']), self.html_title, html_body)
+        blog.update_post(self.data.get_postid(server['name']), self.html_title, html_body, self.get_categories(server))
         self.data.update_blog(self.file_guid, server['name'], self.html_proc.get_html_hash())
         pass
 
@@ -244,11 +263,11 @@ class BlogPost:
 
 
 def usage():
-    help = '''Usage:\r\n      python.exe blogpost.py html_file file_guid html_file2 file_guid2 ...\r\n''';
+    help = '''Usage:\r\n      python.exe blogpost.py categories html_file file_guid html_file2 file_guid2 ...\r\n''';
     print(help)
 
 
-def post_one_file(index, html_file, guid):
+def post_one_file(index, html_file, guid, categories):
     if html_file[-3:] == 'ziw':
         html_file = u.ziw2html(html_file)
     else: # enter html's dir
@@ -260,7 +279,7 @@ def post_one_file(index, html_file, guid):
         f.write("GUID"+str(index)+"=" + guid + "\r\n")
         f.close()
 
-    mypost = BlogPost(html_file, guid, config_file, data_file)
+    mypost = BlogPost(html_file, guid, categories, config_file, data_file)
     mypost.post()
 
     mylogger.write("Post file: \nTitle: " + mypost.html_title + "\nGUID : " + mypost.file_guid +"\n")
@@ -274,7 +293,7 @@ def main():
     u.debug.print(sys.argv)
 
     argnum = len(sys.argv)
-    if argnum < 3 or argnum %2 != 1:
+    if argnum < 4 or argnum %2 != 0:
         usage()
         return -1
 
@@ -286,8 +305,8 @@ def main():
     f.write("[Common]\r\n")
     f.close()
 
-    for index in range(int((len(sys.argv) - 1) / 2)):  #argv[0] = 'BlogPost.py'
-        post_one_file(index, sys.argv[index * 2 + 1], sys.argv[index * 2 + 2])
+    for index in range(int((len(sys.argv) - 2) / 2)):  #argv[0] = 'BlogPost.py'
+        post_one_file(index, sys.argv[index * 2 + 2], sys.argv[index * 2 + 3], sys.argv[1]) #argv[1] = categories,  seperated by ;
 
     return 0
 

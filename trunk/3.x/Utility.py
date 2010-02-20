@@ -6,6 +6,7 @@ import os
 import time
 import zipfile
 import tempfile
+import re
 
 import UserException
 import ToolDir
@@ -114,6 +115,20 @@ def tool_dir(need_sep):
     if need_sep:
         return ToolDir.get_main_dir() + os.path.sep
     return ToolDir.get_main_dir()
+
+def split_to_list(string, sep, especial = None):
+    '''Split string to list according to sep, and remove all especial element.'''
+    temp = re.split(sep, string)
+    if especial == None:   # if not especial, then especial='' (False) also satisfied the condition
+        return temp
+    while True:
+        try:
+            temp.remove(especial)
+        except:
+            return temp   # especial not found, remove fail, will raise an exception
+
+def get_intersection(list1, list2):
+    return list(set(list1) & set(list2))
 
 # print debug info.
 # use: u.debug.print("some info")

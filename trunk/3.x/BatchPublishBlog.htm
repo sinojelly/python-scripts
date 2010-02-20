@@ -195,6 +195,10 @@ hr {
     //
     function PublishDocuments() {    	        
         var category = textCategory.value;
+        if (category == "")
+        {
+        	  category = "Uncategorized";
+        }
         //
         //save settings to database
         database.Meta(settings_meta, "Category") = category;
@@ -203,9 +207,9 @@ hr {
         //
         
         // jelly: if you see a flash of dos console , probably this tool_dir error.
-        var tool_dir = "%USERPROFILE%\\My Documents\\My Knowledge\\Plugins\\{A0D025CD-970A-4C62-97E4-5CF6F2C9DD6A}"
+        var tool_dir = "%USERPROFILE%\\My Documents\\My Knowledge\\Plugins\\{A0D025CD-970A-4C62-97E4-5CF6F2C9DD6A}";
         
-        var param_string = " \""+tool_dir+"\\BlogPost.py\" ";
+        var param_string = " \""+tool_dir+"\\BlogPost.py\" " + category + " ";
         for (var i = 0; i < document_count; i++) {
             var wiz_document = selected_documents.Item(i);
             if (null == wiz_document)
