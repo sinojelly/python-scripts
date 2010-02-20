@@ -229,6 +229,8 @@ def main():
     html_file = sys.argv[1]
     if html_file[-3:] == 'ziw':
         html_file = u.ziw2html(html_file)
+    else: # enter html's dir
+        os.chdir(os.path.dirname(html_file))
 
     if len(sys.argv) == 3:  # default xml is in tool dir
         config_file = tool_dir+ os.path.sep + 'blogconfig.xml'

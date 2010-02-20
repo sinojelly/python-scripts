@@ -1,15 +1,19 @@
 
 htm中调用py的路径，需要用变量改写。（如果用户目录修改过，则可能失效，可考虑是否能改进）
 
-一次发布多篇文章的测试。
+一次发布多篇文章的测试。（需要修改某些服务器链接失败不抛出异常）
 
 支持metaweblog
 
 文章的分类。
 
+打印版本和作者信息。
+
 还需要验证guid作为文章唯一id，工具作为wk插件时，是否写blogdata.xml成功。
 
-较多的部分文章Post content的时候始终出现异常，WK没有问题。
+较多的部分文章Post content的时候始终出现异常，WK没有问题。（可以尝试用WK的ziw解析方法）
+使用WK的ziw解析方法，然后直接用pyBlogPost发布html文件，成功率就很高了。
+但这种方式，图片路径未替换为远程路径。【【
 
   File "D:\Users\Documents\My Knowledge\Plugins\{A0D025CD-970A-4C62-97E4-5CF6F2C9DD6A}\BlogPost.py", line 58, in new_post
     return pyblog.WordPress.new_post(self, self.get_content(title, body))
