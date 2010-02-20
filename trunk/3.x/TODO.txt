@@ -1,4 +1,7 @@
 
+
+
+
 htm中调用py的路径，需要用变量改写。（如果用户目录修改过，则可能失效，可考虑是否能改进）
 
 一次发布多篇文章的测试。（需要修改某些服务器链接失败不抛出异常）
@@ -15,18 +18,29 @@ Python窗口不关闭，上一次打开的http还链接，会导致下一次链接同样的服务器失败。
 
 还需要验证guid作为文章唯一id，工具作为wk插件时，是否写blogdata.xml成功。
 
---------------------------------------------
-较多的部分文章Post content的时候始终出现异常，WK没有问题。（可以尝试用WK的ziw解析方法）
-使用WK的ziw解析方法，然后直接用pyBlogPost发布html文件，成功率就很高了。比较html差异，其实WK也只不过加了个title而已。
-但这种方式，图片路径未替换为远程路径。
-读中间保存的文本文件是替换OK的。由此可见，是WK的save ziw保存的文件编码与直接解压缩的不同所致。
-去掉读取html处的encoding="utf-16"又会有异常：
-UnicodeDecodeError: 'gbk' codec can't decode bytes in position 0-1: illegal multibyte sequence
-后来发现，问题不是编码，是调试打印输出错误引起判断错误。
-事实是下面的：
-p.sub()　正则表达式替换确实有问题。
-string.replace(old,new) 没有问题。
----------------------------------------------------
+
+wiz_document与uuid关联。（OK了，读ini文件时路径不能有引号。）
+
+
+Google小工具一文新加图片上传时有如下问题：
+try: urllib.request.urlopen(url)有时也会出现同样问题。可能是服务器出问题了。后来再尝试就好了。
+  File "D:\Users\Documents\My Knowledge\Plugins\{A0D025CD-970A-4C62-97E4-5CF6F2C9DD6A}\pyblog.py", line 247, in new_media_object
+    return self.execute('metaWeblog.newMediaObject', blogid, self.username, self.password, new_object)
+  File "D:\Users\Documents\My Knowledge\Plugins\{A0D025CD-970A-4C62-97E4-5CF6F2C9DD6A}\pyblog.py", line 138, in execute
+    r = getattr(self.server, methodname)(args)
+  File "C:\Python31\lib\xmlrpc\client.py", line 1029, in __call__
+    return self.__send(self.__name, args)
+  File "C:\Python31\lib\xmlrpc\client.py", line 1271, in __request
+    verbose=self.__verbose
+  File "C:\Python31\lib\xmlrpc\client.py", line 1059, in request
+    resp = http_conn.getresponse()
+  File "C:\Python31\lib\http\client.py", line 1002, in getresponse
+    response.begin()
+  File "C:\Python31\lib\http\client.py", line 347, in begin
+    version, status, reason = self._read_status()
+  File "C:\Python31\lib\http\client.py", line 309, in _read_status
+    raise BadStatusLine(line)
+http.client.BadStatusLine
 
 
 
