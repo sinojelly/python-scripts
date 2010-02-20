@@ -14,6 +14,16 @@ import Utility as u
 import MIME
 import UserException
 
+__author__ = "Chen Guodong"
+__copyright__ = "Copyright 2010, Guodong Workshop."
+
+__license__ = "New BSD License"
+__version__ = "1.0.0"
+__maintainer__ = "Chen Guodong(sinojelly)"
+__email__ = "sinojelly@gmail.com"
+__status__ = "Production"
+__welcome__ = "Welcome to use BatchPublishBlog tool."
+
 guid_file = u.tool_dir(True) + 'lastpost_guid.ini'    # assign guid/uuid on the first post
 config_file = u.tool_dir(True) + 'blogconfig.xml'
 data_file = u.tool_dir(True) + 'blogdata.xml'
@@ -256,6 +266,11 @@ def post_one_file(index, html_file, guid):
     mylogger.write("Post file: \nTitle: " + mypost.html_title + "\nGUID : " + mypost.file_guid +"\n")
 
 def main():
+    print(__welcome__)
+    print("Version : " + __version__)
+    print("Author  : " + __author__ )
+    print("Email   : " + __email__)
+
     u.debug.print(sys.argv)
 
     argnum = len(sys.argv)

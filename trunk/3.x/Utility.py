@@ -118,7 +118,7 @@ def tool_dir(need_sep):
 # print debug info.
 # use: u.debug.print("some info")
 class debug:
-    is_debug = True #False
+    is_debug = False
     def print(string):
         if debug.is_debug:
             print_t(string)
