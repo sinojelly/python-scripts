@@ -61,7 +61,8 @@ class HtmlProc:
     	#大小写忽略，也可以用re.I
         u.print_t("Get media list...")
         ##p = re.compile(r'''.*?<.*?IMG.*?src\s*=\s*"(.*?)".*?>.*?''',re.S|re.I)   #some times, this is very slow. #必须有前后的.*
-        p = re.compile(r'''<IMG.*?src="(.*?)">''',re.S|re.I)
+        #p = re.compile(r'''<IMG.*?src="(.*?)".*?>''',re.S|re.I)
+        p = re.compile(r'''<IMG.*?src="(.*?)"''',re.S|re.I)
 
         iterator = p.finditer(self.html_body)
         for match in iterator:

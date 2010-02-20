@@ -8,7 +8,7 @@
 
 功能列表
 ===================
-1、支持向WordPress空间发布带图的文章。
+1、支持向WordPress、cnblogs等博客服务器发布带图的文章。
 2、支持一次向多个服务器发布文章。
 3、支持通过xml文件配置服务器参数。
 4、支持发布WizKnowedge文章。
@@ -22,16 +22,18 @@
 12、html文件没修改，只修改图片，那么图片不会单独上传。
 13、可以修改MIME.xml以支持更多媒体文件类型。
 14、支持作为WizKnowedge插件，并且在第一次发布时分配UUID，然后作为该文章的永久唯一标示。
+15、支持上传时指定文章分类。
 
 
 使用方法
 ===================
 需要先安装Python 3.1以上版本，并且把Python.exe所在目录添加到path变量中。
 1、修改配置文件blogconfig.xml，配置为自己的博客服务器、账户参数。
-2、运行命令：python.exe blogpost.py html_file file_guid [config_file data_file] (中括号内是可选参数)
+2、运行命令：python.exe blogpost.py categories html_file file_guid html_file2 file_guid2 ...
 3、最好的使用方法是作为WizKnowedge插件使用，那么需要在%USERPROFILE%\My Documents\My Knowledge\Plugins目录创建新的目录“{A0D025CD-970A-4C62-97E4-5CF6F2C9DD6A}”，
 然后把代码库中“https://pyblogpost.googlecode.com/hg/trunk/3.x"所有代码下载到该目录。重新打开WizKnowedge，就可以看到插件菜单中多了一个”博文批量发布“。
 注意需要先修改blogconfig.xml中的服务器配置，再发布文章。
+3、文章分类categories是以半角逗号分隔的多个分类组成的字符串，可以是中文。该分类必须在服务器上已存在，才能生效。在客户端不能创建分类（因为MetaWeblog不支持客户端创建,虽然WordPress可以支持，但不能通用也意义不大）。
 
 说明：
 1、file_guid是html文件的唯一身份识别码，无论文章怎么修改都保持不变，也不会与别的文章重复。guid输入0时，工具会自动生成一个，并且保存在工具目录下的lastpost_guid.ini。

@@ -1,21 +1,33 @@
 <?xml version="1.0"?>
 <config>
+    <fileserver>
+        <name>sinojelly.cnblogs.com</name>
+        <system>wordpress</system>
+        <posturl>http://www.cnblogs.com/sinojelly/services/metablogapi.aspx</posturl>
+        <username>sinojelly</username>
+        <password>123456</password>
+        <postblog>true</postblog>
+        <media>2</media>
+        <categories></categories>
+    </fileserver>
     <blog>
         <name>blog.sinojelly.dreamhosters.com</name>
         <system>wordpress</system>
         <posturl>http://blog.sinojelly.dreamhosters.com/xmlrpc.php</posturl>
         <username>admin</username>
         <password>123456</password>
-        <postblog>true</postblog>
-        <media>2</media>
+        <postblog>false</postblog>
+        <media>0</media>
+        <categories></categories>
     </blog>
-    <fileserver>
+    <blog>
         <name>sinojelly.20x.cc</name>
         <system>wordpress</system>
         <posturl>http://sinojelly.20x.cc/xmlrpc.php</posturl>
         <username>admin</username>
         <password>123456</password>
-        <postblog>true</postblog>
-        <media>2</media>
-    </fileserver>
+        <postblog>false</postblog>
+        <media>0</media>
+        <categories></categories>
+    </blog>
 </config>

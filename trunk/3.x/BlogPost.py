@@ -77,7 +77,7 @@ class WordPressX(pyblog.WordPress):
         pyblog.WordPress.__init__(self, posturl, username, password)
 
     def new_post(self, title, body, categories):
-        return pyblog.WordPress.new_post(self, self.get_content(title, body, categories))
+        return pyblog.WordPress.new_post(self, self.get_content(title, body, categories), blogid='1')
 
     def update_post(self, postid, title, body, categories):
         pyblog.WordPress.edit_post(self, postid, self.get_content(title, body, categories))
@@ -96,11 +96,15 @@ class WordPressX(pyblog.WordPress):
             return url  # upload media fail, return local path
 
     def get_content(self, title, body, categories):  # categories is strings seperated by ';', split to array of string
-        content = {"description":body, "title":title, "categories": self.get_active_categories(categories)}
+        content = {"description":body, "title":title}
+        active_categories = self.get_active_categories(categories)
+        if active_categories:
+            content["categories"] = active_categories
+        print(content)
         return content
 
     def upload_media_func(self, param_tuple):
-        return pyblog.WordPress.new_media_object(self, param_tuple[0])
+        return pyblog.WordPress.new_media_object(self, param_tuple[0], blogid='1')
 
     def get_active_categories(self, categories):
         exist = []

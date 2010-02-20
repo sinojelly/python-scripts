@@ -1,25 +1,5 @@
 
+1、修改xmlrpc代码之后能支持cnblogs的文章发布，但是不支持WordPress的分类功能了。
+2、categories功能解决后，估计能支持一大批的博客。
 
 
-
-
-支持metaweblog
-
-文章的分类。（代码写完，网络不好未测试。）
-
-
-
-
-  File "D:\Users\Documents\My Knowledge\Plugins\{A0D025CD-970A-4C62-97E4-5CF6F2C9DD6A}\BlogPost.py", line 58, in new_post
-    return pyblog.WordPress.new_post(self, self.get_content(title, body))
-  File "D:\Users\Documents\My Knowledge\Plugins\{A0D025CD-970A-4C62-97E4-5CF6F2C9DD6A}\pyblog.py", line 197, in new_post
-    return self.execute('metaWeblog.newPost', blogid, self.username, self.password, content, publish)
-  File "D:\Users\Documents\My Knowledge\Plugins\{A0D025CD-970A-4C62-97E4-5CF6F2C9DD6A}\pyblog.py", line 138, in execute
-    r = getattr(self.server, methodname)(args)
-  File "C:\Python31\lib\xmlrpc\client.py", line 1029, in __call__
-    return self.__send(self.__name, args)
-  File "C:\Python31\lib\xmlrpc\client.py", line 1271, in __request
-    verbose=self.__verbose
-  File "C:\Python31\lib\xmlrpc\client.py", line 1065, in request
-    dict(resp.getheaders())
-xmlrpc.client.ProtocolError: <ProtocolError for sinojelly.20x.cc/xmlrpc.php: 500 Internal Server Error>
