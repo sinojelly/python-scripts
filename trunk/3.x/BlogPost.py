@@ -221,6 +221,8 @@ def usage():
     print(help)
 
 def main():
+    u.debug.print(sys.argv)
+
     if len(sys.argv) < 3:
         usage()
         return -1

@@ -32,8 +32,28 @@ class HtmlProc:
         return self.media_files
 
     def update_html_body(self, html_body, media, url):
-        p = re.compile(media,re.S|re.I)
-        return p.sub(url, html_body)  #替换html文件中的img图片路径为网络路径
+        ##global global_index
+        ##u.save_file(u.tool_dir(True)+"debug_html_body_%d.txt" % global_index, "[media]"+media + "\n[url]" + url+"\n"+ html_body)
+        ##global_index = global_index + 1
+        #p = re.compile(media,re.S|re.I) # some times not work.
+        #return p.sub(url, html_body)  #替换html文件中的img图片路径为网络路径
+        return html_body.replace(media, url) # this is ok!
+        #return self.string_replace(html_body, media, url) # this is ok, but ulgly
+
+    def string_replace(self, string, old, new):
+        temp = ""
+        index = string.find(old)
+        while index >= 0:
+            temp += string[0:index]
+            temp += new
+            ##if (index+len(old) < len(string)):
+            #print("find at: %d" % index)
+            ##print(len(string))
+            temp += string[index+len(old) :]
+            string = temp
+            index = string.find(old)
+            temp = ""
+        return string
 
     def init_media_files(self):
         '''Get list of media files path.'''
@@ -72,6 +92,8 @@ class HtmlProc:
             self.html_body = html_content
 
         #去掉尾
-        p = re.compile(r'</BODY>.*</HTML>',re.S | re.I)
+        p = re.compile(r'</BODY>(.*</HTML>)?',re.S | re.I) # if no body, but have html, there will be a problem
         self.html_body = p.sub("",self.html_body)
 
+
+##global_index = 0

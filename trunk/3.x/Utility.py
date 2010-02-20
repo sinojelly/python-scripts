@@ -8,6 +8,7 @@ import zipfile
 import tempfile
 
 import UserException
+import ToolDir
 
 
 #**************************************
@@ -103,6 +104,24 @@ def try_exec(exception, times, delay, func, *params):
             print_t(ex)
             continue
     raise UserException.TryTimeOutException
+
+def save_file(file, string):
+    f = open(file, 'w')
+    f.write(string)
+    f.close()
+
+def tool_dir(need_sep):
+    if need_sep:
+        return ToolDir.get_main_dir() + os.path.sep
+    return ToolDir.get_main_dir()
+
+# print debug info.
+# use: u.debug.print("some info")
+class debug:
+    is_debug = True #False
+    def print(string):
+        if debug.is_debug:
+            print_t(string)
 
 
 #module test
