@@ -3,6 +3,7 @@
 import xmlrpc.client
 import sys
 import os
+import uuid
 
 import pyblog
 
@@ -10,13 +11,24 @@ import HtmlProc
 import BlogConfig
 import BlogData
 import Utility as u
-import ToolDir
 import MIME
 import UserException
 
+guid_file = u.tool_dir(True) + 'lastpost_guid.ini'    # assign guid/uuid on the first post
+config_file = u.tool_dir(True) + 'blogconfig.xml'
+data_file = u.tool_dir(True) + 'blogdata.xml'
+log_file = u.tool_dir(True) + 'runlog.txt'
+
 # this python file's path
-tool_dir = ToolDir.get_main_dir()
-mime_config = MIME.MIME(tool_dir + os.path.sep + 'MIME.xml')
+mime_config = MIME.MIME(u.tool_dir(True) + 'MIME.xml')
+
+class Logger:
+    def write(self, s):
+        f = open(log_file, "a")
+        f.write(s)
+        f.close()
+
+mylogger = Logger()
 
 def get_mime_type(suffix):
     return mime_config.get_mime_type(suffix)
@@ -92,6 +104,7 @@ class BlogPost:
     }
     def __init__(self, html_file, html_file_guid, config_file, data_file):
 ##        try:
+        self.servers_blog = {}
         self.html_proc = HtmlProc.HtmlProc(html_file)
         self.file_name = html_file
         self.file_guid = html_file_guid
@@ -172,8 +185,12 @@ class BlogPost:
         pass
 
     def connect(self, server):
-        u.print_t("Connect to server %s..." % server['name'])
-        return self.server_class[server['system']](server['posturl'], server['username'], server['password'])
+        try:
+            return self.servers_blog[server['name']]  # hold server connection. first time, should raise a KeyErr exception
+        except:
+            u.print_t("Connect to server %s..." % server['name'])
+            self.servers_blog[server['name']] = self.server_class[server['system']](server['posturl'], server['username'], server['password'])
+            return self.servers_blog[server['name']]
 
     def post_blog(self, server):
         if server['postblog'] != 'true':
@@ -217,46 +234,47 @@ class BlogPost:
 
 
 def usage():
-    help = '''Usage:\r\n      python.exe blogpost.py html_file file_guid [config_file data_file]\r\n''';
+    help = '''Usage:\r\n      python.exe blogpost.py html_file file_guid html_file2 file_guid2 ...\r\n''';
     print(help)
 
-def main():
-    u.debug.print(sys.argv)
 
-    if len(sys.argv) < 3:
-        usage()
-        return -1
-
-    cur_dir = os.getcwd()
-    html_file = sys.argv[1]
+def post_one_file(index, html_file, guid):
     if html_file[-3:] == 'ziw':
         html_file = u.ziw2html(html_file)
     else: # enter html's dir
         os.chdir(os.path.dirname(html_file))
 
-    if len(sys.argv) == 3:  # default xml is in tool dir
-        config_file = tool_dir+ os.path.sep + 'blogconfig.xml'
-        data_file = tool_dir+ os.path.sep + 'blogdata.xml'
-    if len(sys.argv) == 5:
-        config_file = cur_dir+ os.path.sep + sys.argv[3]  # input xml path relative to run path
-        data_file = cur_dir+ os.path.sep + sys.argv[4]
+    if guid == '0':
+        guid = "%s" % uuid.uuid1()   # convert to string
+        f = open(guid_file, "a")
+        f.write("GUID"+str(index)+"=" + guid + "\r\n")
+        f.close()
+
+    mypost = BlogPost(html_file, guid, config_file, data_file)
+    mypost.post()
+
+    mylogger.write("Post file: \nTitle: " + mypost.html_title + "\nGUID : " + mypost.file_guid +"\n")
+
+def main():
+    u.debug.print(sys.argv)
+
+    argnum = len(sys.argv)
+    if argnum < 3 or argnum %2 != 1:
+        usage()
+        return -1
 
     if not os.path.isfile(config_file):
         printf('Config file(%s) not exist!' % config_file)
         return -1
 
-    guid = sys.argv[2]
-    if guid == '0':
-        import uuid
-        guid = "%s" % uuid.uuid1()   # convert to string
-        f = open(tool_dir+ os.path.sep + 'lastpost_guid.ini', "w")
-        f.write("[Common]\r\nGUID=" + guid)
-        f.close()
+    f = open(guid_file, "w")
+    f.write("[Common]\r\n")
+    f.close()
 
-    return BlogPost(html_file, guid, config_file, data_file).post()
+    for index in range(int((len(sys.argv) - 1) / 2)):  #argv[0] = 'BlogPost.py'
+        post_one_file(index, sys.argv[index * 2 + 1], sys.argv[index * 2 + 2])
 
-    usage()
-    return -1
+    return 0
 
 if   __name__  ==  "__main__":
 
@@ -267,18 +285,14 @@ if   __name__  ==  "__main__":
 ##    except:
 ##        u.print_t("Unknown exception!")
     finally:
-        class Logger:
-            def write(self, s):
-                f = open(tool_dir+ os.path.sep + 'exception.txt', "a")
-                f.write(s)
-                f.close()
+        print("Please check file("+log_file+") for more infomation.")
 
-        mylogger = Logger()
         #stdout_ = sys.stdout # backup reference to the old stdout.
         sys.stdout = mylogger
         sys.stderr = mylogger
 
+        print("Batch publish blog finished at "+u.get_modify_time() +"\n")
         os.system("pause")
-        print(u.get_modify_time())
+
 
 

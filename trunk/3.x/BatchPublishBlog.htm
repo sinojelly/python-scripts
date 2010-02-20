@@ -202,6 +202,10 @@ hr {
         var document_count = selected_documents.Count;
         //
         
+        // jelly: if you see a flash of dos console , probably this tool_dir error.
+        var tool_dir = "%USERPROFILE%\\My Documents\\My Knowledge\\Plugins\\{A0D025CD-970A-4C62-97E4-5CF6F2C9DD6A}"
+        
+        var param_string = " \""+tool_dir+"\\BlogPost.py\" ";
         for (var i = 0; i < document_count; i++) {
             var wiz_document = selected_documents.Item(i);
             if (null == wiz_document)
@@ -216,14 +220,34 @@ hr {
             
             var html_file_name = objCommon.GetATempFileName("htm");
             wiz_document.SaveToHtml(html_file_name, 0);
-            //alert(html_file_name);
-            var tool_dir = "%USERPROFILE%\\My Documents\\My Knowledge\\Plugins\\{A0D025CD-970A-4C62-97E4-5CF6F2C9DD6A}"
+            //alert(html_file_name); 
+            param_string +=  " \""+ html_file_name +"\" "+ html_guid;
+        }
 
-            //exec("python.exe \"D:\\Users\\Documents\\My Knowledge\\Plugins\\{A0D025CD-970A-4C62-97E4-5CF6F2C9DD6A}\\BlogPost.py\" \""+wiz_document.FileName+"\" 1234567890");
-            var ret = objCommon.RunExe("python.exe"," \""+tool_dir+"\\BlogPost.py\" \""+html_file_name+"\" "+html_guid, true); 
-            if (0 == ret) {
-							  wiz_document.ParamValue("BatchPublishHtml_GUID") = objCommon.GetValueFromIni(tool_dir+"\\lastpost_guid.ini", "Common", "GUID"); // jelly: should be no quotes surround the file path.
-            }  
+        //exec("python.exe \"D:\\Users\\Documents\\My Knowledge\\Plugins\\{A0D025CD-970A-4C62-97E4-5CF6F2C9DD6A}\\BlogPost.py\" \""+wiz_document.FileName+"\" 1234567890");
+        var ret = objCommon.RunExe("python.exe",param_string, true); 
+        if (0 == ret) {
+					for (var i = 0; i < document_count; i++) {
+		            var wiz_document = selected_documents.Item(i);
+		            if (null == wiz_document)
+		                continue;
+		            //alert(wiz_document.FileName);
+		            
+		            html_guid = wiz_document.ParamValue("BatchPublishHtml_GUID");
+		            if (html_guid == "")
+		            {
+		            	  wiz_document.ParamValue("BatchPublishHtml_GUID") = objCommon.GetValueFromIni(tool_dir+"\\lastpost_guid.ini", "Common", "GUID"+i); // jelly: should be no quotes surround the file path.
+		            }					          
+		        }
+        }  
+        else
+        {
+        	  var fso=new ActiveXObject("Scripting.FileSystemObject"); 
+        		if (!fso.FileExists(tool_dir + "\\BlogPost.py")) 
+						{
+						    alert("Tool("+tool_dir + "\\BlogPost.py) not exist. please modify tool_dir in BatchPublishBlog.htm."); 
+						    return;
+						}
         }
     }
     function CloseDialog(ret) {

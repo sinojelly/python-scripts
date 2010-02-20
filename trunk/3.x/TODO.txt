@@ -1,10 +1,21 @@
 
 
-
-
+-----------------------
+ÏÂÃæÕâĞ©ÎÊÌâ¶¼ÒÑ»ù±¾È·ÈÏ»ò¸Ä½ø¡£
+²ÉÓÃÁËÃüÁîĞĞÖ§³Ö·¢²¼µÄÎÄ¼ş×éµÄ·½·¨£¬·¢²¼¶àÆªÎÄÕÂÎŞĞëÖØĞÂÁ¬½Ó·şÎñÆ÷¡£
+~~~~~~~~~~~
 htmÖĞµ÷ÓÃpyµÄÂ·¾¶£¬ĞèÒªÓÃ±äÁ¿¸ÄĞ´¡££¨Èç¹ûÓÃ»§Ä¿Â¼ĞŞ¸Ä¹ı£¬Ôò¿ÉÄÜÊ§Ğ§£¬¿É¿¼ÂÇÊÇ·ñÄÜ¸Ä½ø£©
+Ò»´Î·¢²¼¶àÆªÎÄÕÂµÄ²âÊÔ¡££¨ĞèÒªĞŞ¸ÄÄ³Ğ©·şÎñÆ÷Á´½ÓÊ§°Ü²»Å×³öÒì³££¬ Î´ĞŞ¸Ä£©
+Python´°¿Ú²»¹Ø±Õ£¬ÉÏÒ»´Î´ò¿ªµÄhttp»¹Á´½Ó£¬»áµ¼ÖÂÏÂÒ»´ÎÁ´½ÓÍ¬ÑùµÄ·şÎñÆ÷Ê§°Ü¡£
+´«ÈëÒ»¸öhtmlÊı×é£¬ÒÀ´Î´¦ÀíËùÓĞÎÄ¼ş¡£
+»¹ĞèÒªÑéÖ¤guid×÷ÎªÎÄÕÂÎ¨Ò»id£¬¹¤¾ß×÷Îªwk²å¼şÊ±£¬ÊÇ·ñĞ´blogdata.xml³É¹¦¡£
+ÉÙÊıÎÄÕÂÃ¿´Î·¢²¼Ê±hash»á±ä¡£
+-----------------------
+Èç¹û´Ó²å¼şÖĞµ÷ÓÃ£¬DOS´°¿ÚÒ»ÉÁ¶ø¹ı£¬ÄÇÃ´»ù±¾¿Ï¶¨ÊÇ¹¤¾ßÂ·¾¶Ö¸¶¨´íÎó¡£
+ÔÚjsÖĞÔö¼ÓÁËÅĞ¶Ï£¬Èç¹û¹¤¾ßÂ·¾¶²»´æÔÚÔòÌáÊ¾´íÎó¡£
+js¼ì²éÎÄ¼şÊÇ·ñ´æÔÚ»áµ¯³ö°²È«ÌáÊ¾£¬Òò´Ë·Åµ½Òì³£·ÖÖ§£¬Õı³£Çé¿öÏÂ²»»áµ¯³öÌáÊ¾¡£
+-----------------------
 
-Ò»´Î·¢²¼¶àÆªÎÄÕÂµÄ²âÊÔ¡££¨ĞèÒªĞŞ¸ÄÄ³Ğ©·şÎñÆ÷Á´½ÓÊ§°Ü²»Å×³öÒì³££©
 
 Ö§³Ömetaweblog
 
@@ -12,35 +23,6 @@ htmÖĞµ÷ÓÃpyµÄÂ·¾¶£¬ĞèÒªÓÃ±äÁ¿¸ÄĞ´¡££¨Èç¹ûÓÃ»§Ä¿Â¼ĞŞ¸Ä¹ı£¬Ôò¿ÉÄÜÊ§Ğ§£¬¿É¿¼ÂÇÊÇ·ñÄ
 
 ´òÓ¡°æ±¾ºÍ×÷ÕßĞÅÏ¢¡£
 
-Python´°¿Ú²»¹Ø±Õ£¬ÉÏÒ»´Î´ò¿ªµÄhttp»¹Á´½Ó£¬»áµ¼ÖÂÏÂÒ»´ÎÁ´½ÓÍ¬ÑùµÄ·şÎñÆ÷Ê§°Ü¡£
-
-´«ÈëÒ»¸öhtmlÊı×é£¬ÒÀ´Î´¦ÀíËùÓĞÎÄ¼ş¡£
-
-»¹ĞèÒªÑéÖ¤guid×÷ÎªÎÄÕÂÎ¨Ò»id£¬¹¤¾ß×÷Îªwk²å¼şÊ±£¬ÊÇ·ñĞ´blogdata.xml³É¹¦¡£
-
-
-wiz_documentÓëuuid¹ØÁª¡££¨OKÁË£¬¶ÁiniÎÄ¼şÊ±Â·¾¶²»ÄÜÓĞÒıºÅ¡££©
-
-
-GoogleĞ¡¹¤¾ßÒ»ÎÄĞÂ¼ÓÍ¼Æ¬ÉÏ´«Ê±ÓĞÈçÏÂÎÊÌâ£º
-try: urllib.request.urlopen(url)ÓĞÊ±Ò²»á³öÏÖÍ¬ÑùÎÊÌâ¡£¿ÉÄÜÊÇ·şÎñÆ÷³öÎÊÌâÁË¡£ºóÀ´ÔÙ³¢ÊÔ¾ÍºÃÁË¡£
-  File "D:\Users\Documents\My Knowledge\Plugins\{A0D025CD-970A-4C62-97E4-5CF6F2C9DD6A}\pyblog.py", line 247, in new_media_object
-    return self.execute('metaWeblog.newMediaObject', blogid, self.username, self.password, new_object)
-  File "D:\Users\Documents\My Knowledge\Plugins\{A0D025CD-970A-4C62-97E4-5CF6F2C9DD6A}\pyblog.py", line 138, in execute
-    r = getattr(self.server, methodname)(args)
-  File "C:\Python31\lib\xmlrpc\client.py", line 1029, in __call__
-    return self.__send(self.__name, args)
-  File "C:\Python31\lib\xmlrpc\client.py", line 1271, in __request
-    verbose=self.__verbose
-  File "C:\Python31\lib\xmlrpc\client.py", line 1059, in request
-    resp = http_conn.getresponse()
-  File "C:\Python31\lib\http\client.py", line 1002, in getresponse
-    response.begin()
-  File "C:\Python31\lib\http\client.py", line 347, in begin
-    version, status, reason = self._read_status()
-  File "C:\Python31\lib\http\client.py", line 309, in _read_status
-    raise BadStatusLine(line)
-http.client.BadStatusLine
 
 
 
