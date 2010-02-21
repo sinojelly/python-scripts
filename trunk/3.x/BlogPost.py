@@ -16,9 +16,10 @@ import UserException
 
 __author__ = "Chen Guodong"
 __copyright__ = "Copyright 2010, Guodong Workshop."
+__version__=["Wei Shijun", "Bao Fanfan"]
 
 __license__ = "New BSD License"
-__version__ = "1.0.0"
+__version__ = "1.0.1"
 __maintainer__ = "Chen Guodong(sinojelly)"
 __email__ = "sinojelly@gmail.com"
 __status__ = "Production"
@@ -73,8 +74,9 @@ class BlogDataX(BlogData.BlogData):
     pass
 
 class WordPressX(pyblog.WordPress):
-    def __init__(self, posturl, username, password):
-        pyblog.WordPress.__init__(self, posturl, username, password)
+    def __init__(self, server):
+        self.serverparam = server
+        pyblog.WordPress.__init__(self, server['posturl'], server['username'], server['password'], server['encoding'])
 
     def new_post(self, title, body, categories):
         return pyblog.WordPress.new_post(self, self.get_content(title, body, categories), blogid='1')
@@ -97,10 +99,12 @@ class WordPressX(pyblog.WordPress):
 
     def get_content(self, title, body, categories):  # categories is strings seperated by ';', split to array of string
         content = {"description":body, "title":title}
-        active_categories = self.get_active_categories(categories)
+        if self.serverparam['vcategories'] == 'true':
+            active_categories = self.get_active_categories(categories)
+        else:
+            active_categories = u.split_to_list(categories, ';', '')
         if active_categories:
             content["categories"] = active_categories
-        print(content)
         return content
 
     def upload_media_func(self, param_tuple):
@@ -182,10 +186,10 @@ class BlogPost:
 
     def get_categories(self, server):
         categories = ""
-        if self.categories:
-            categories += self.categories + ";"
         if server['categories']:
-            categories += server['categories']
+            categories += server['categories'] + ";"
+        if self.categories:
+            categories += self.categories
         return categories
 
     def new_blog(self, blog, server):
@@ -222,7 +226,7 @@ class BlogPost:
             return self.servers_blog[server['name']]  # hold server connection. first time, should raise a KeyErr exception
         except:
             u.print_t("Connect to server %s..." % server['name'])
-            self.servers_blog[server['name']] = self.server_class[server['system']](server['posturl'], server['username'], server['password'])
+            self.servers_blog[server['name']] = self.server_class[server['system']](server)
             return self.servers_blog[server['name']]
 
     def post_blog(self, server):

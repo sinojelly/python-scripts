@@ -112,7 +112,7 @@ class BlogData:
         blog_node = lxml.etree.Element('blog')
         blog_node.set('name', blog_name)
         temp_node = lxml.etree.Element('postid')
-        temp_node.text = postid
+        temp_node.text = str(postid)
         blog_node.append(temp_node)
         temp_node = lxml.etree.Element('file_hash')
         temp_node.text = file_hash

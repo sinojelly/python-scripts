@@ -49,7 +49,7 @@
 # 2003-07-12 gp  Correct marshalling of Faults
 # 2003-10-31 mvl Add multicall support
 # 2004-08-20 mvl Bump minimum supported Python version to 2.1
-# 2010-02-21 cgd Reorganize http request message format (Chenguodong email:sinojelly@gmail.com)
+# 2010-02-22 cgd Reorganize http request message format (Chenguodong email:sinojelly@gmail.com)
 ##
 # Copyright (c) 1999-2002 by Secret Labs AB.
 # Copyright (c) 1999-2002 by Fredrik Lundh.
@@ -593,7 +593,19 @@ class Marshaller:
             write("</param>\n")
         del self.memo[i]
     dispatch[tuple] = dump_array
-    dispatch[list] = dump_array
+
+    def dump_list(self, value, write):
+        i = id(value)
+        if i in self.memo:
+            raise TypeError("cannot marshal recursive sequences")
+        self.memo[i] = None
+        dump = self.__dump
+        write("<value><array><data>\n")
+        for v in value:
+            dump(v, write)
+        write("</data></array></value>\n")
+        del self.memo[i]
+    dispatch[list] = dump_list
 
     def dump_struct(self, value, write, escape=escape):
         i = id(value)

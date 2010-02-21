@@ -1,33 +1,51 @@
-<?xml version="1.0"?>
+<?xml version="1.0" encoding="gb2312"?>
 <config>
     <fileserver>
         <name>sinojelly.cnblogs.com</name>
         <system>wordpress</system>
+        <encoding>utf-8</encoding>
         <posturl>http://www.cnblogs.com/sinojelly/services/metablogapi.aspx</posturl>
         <username>sinojelly</username>
         <password>123456</password>
         <postblog>true</postblog>
         <media>2</media>
         <categories></categories>
+        <vcategories>true</vcategories>
     </fileserver>
     <blog>
         <name>blog.sinojelly.dreamhosters.com</name>
         <system>wordpress</system>
+        <encoding>utf-8</encoding>
         <posturl>http://blog.sinojelly.dreamhosters.com/xmlrpc.php</posturl>
         <username>admin</username>
         <password>123456</password>
         <postblog>false</postblog>
         <media>0</media>
         <categories></categories>
+        <vcategories>true</vcategories>
     </blog>
     <blog>
         <name>sinojelly.20x.cc</name>
         <system>wordpress</system>
+        <encoding>utf-8</encoding>
         <posturl>http://sinojelly.20x.cc/xmlrpc.php</posturl>
         <username>admin</username>
         <password>123456</password>
         <postblog>false</postblog>
         <media>0</media>
         <categories></categories>
+        <vcategories>true</vcategories>
+    </blog>
+    <blog>
+        <name>sinojelly.blog.51cto.com</name>
+        <system>wordpress</system>
+        <encoding>gb2312</encoding>
+        <posturl>http://sinojelly.blog.51cto.com/xmlrpc.php</posturl>
+        <username>sinojelly</username>
+        <password>123456</password>
+        <postblog>true</postblog>
+        <media>0</media>
+        <categories>【创作类型:原创】;开发技术-Web开发</categories>
+        <vcategories>false</vcategories>
     </blog>
 </config>

@@ -41,7 +41,7 @@ class Blog(object):
 
     Rightnow, it returns Python based dictionary as it is returned by the server but later on we maybe encapsulate the data using simplified custon object.
     """
-    def __init__(self, serverapi, username, password, appkey):
+    def __init__(self, serverapi, username, password, encoding, appkey):
         """
         Args:
             serverapi = URL to the XML-RPC API.
@@ -58,7 +58,7 @@ class Blog(object):
             raise BlogError('XML-RPC API URL not found(Maybe network broken).')
 
         # Connect to the api. Call listMethods to keep a dictionary of available methods
-        self.server             = xmlrpc.client.ServerProxy(serverapi, verbose=0)
+        self.server             = xmlrpc.client.ServerProxy(serverapi, encoding = encoding, verbose=0)
         self.list_methods2()
 
     def list_methods(self):
@@ -162,8 +162,8 @@ class MetaWeblog(Blog):
     This class extends Blog to implement metaWeblog API
     """
 
-    def __init__(self, serverapi, username, password, appkey='0x001'):
-        Blog.__init__(self, serverapi, username, password, appkey)
+    def __init__(self, serverapi, username, password, encoding, appkey='0x001'):
+        Blog.__init__(self, serverapi, username, password, encoding, appkey)
 
     def get_recent_posts(self, numposts=10, blogid=1):
         """
@@ -261,8 +261,8 @@ class WordPress(MetaWeblog):
     Wordpress basically implements all MetaWebLog and extends it by providing it with its methods.
     """
 
-    def __init__(self, serverapi, username, password):
-        MetaWeblog.__init__(self, serverapi, username, password)
+    def __init__(self, serverapi, username, password, encoding='utf-8'):
+        MetaWeblog.__init__(self, serverapi, username, password, encoding)
 
     def get_post_status_list(self, blogid=1):
         """
