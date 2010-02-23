@@ -54,8 +54,9 @@ class Blog(object):
         self.methods            = []
 
         # Check if URL exists
-        if not checkURL(serverapi):
-            raise BlogError('XML-RPC API URL not found(Maybe network broken).')
+        # Jelly: Check url is not usefull, and it makes articles failed to send to drupal(with Windows Live Writer BlogAPI).
+        #if not checkURL(serverapi):
+        #    raise BlogError('XML-RPC API URL not found(Maybe network broken).')
 
         # Connect to the api. Call listMethods to keep a dictionary of available methods
         self.server             = xmlrpc.client.ServerProxy(serverapi, encoding = encoding, verbose=0)

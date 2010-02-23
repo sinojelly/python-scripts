@@ -48,6 +48,7 @@
 注意：
 1、posturl要指定为xmlrpc.php、metablogapi.aspx、RPC.ashx的完整路径，并且要是自己的博客账户的路径。
 2、用户名、密码是你的博客账户的用户名、密码。（live space除外，参见后面说明）
+3、blog server name不能重复。
 内容格式如下：
 <?xml version="1.0"?>
 <config>
@@ -111,8 +112,10 @@ LiveSpace
 更新历史  2010.2.21  V1.0.1
 ==========================
 1、支持了WP、cnblogs的categories。（修改了Python xmlrpc库，区分对tuple和list的处理。）
-2、支持发布51CTO文章，并且把BlogPost.py编码和网络通信报文编码改为gb2312，正确支持51CTO的类别。
-server name不能重复。
+2、支持发布51CTO文章。
+3、支持通信报文编码可在服务器配置文件中配置(即encoding)。（必须为gb2312，才能正确支持51CTO的类别。）
+4、服务器配置中增加vcategories选项，true表示需要从服务器获取categories，本地设置与服务器活得的分类取交集；否则不获取服务器的categories。
+5、支持WK插件安装，并且附带一个Python31的绿色版本。
 
 
 开源项目路径：

@@ -8,7 +8,7 @@ import hashlib
 class HashMD5:
     def get_hash(self, file):
         ##f = open(file, 'r', encoding = 'UTF-8')
-        f = open(file, 'rb')  # 用二进制读取，避免编码问题，两种方法得到的MD5是一致的
+        f = open(file, 'rb')  # Jelly: use 'rb' to avoid encoding problem, and the MD5 is the same.
         m = hashlib.md5()
         ##m.update(f.read().encode())
         m.update(f.read())

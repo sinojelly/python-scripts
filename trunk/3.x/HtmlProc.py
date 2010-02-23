@@ -36,7 +36,7 @@ class HtmlProc:
         ##u.save_file(u.tool_dir(True)+"debug_html_body_%d.txt" % global_index, "[media]"+media + "\n[url]" + url+"\n"+ html_body)
         ##global_index = global_index + 1
         #p = re.compile(media,re.S|re.I) # some times not work.
-        #return p.sub(url, html_body)  #替换html文件中的img图片路径为网络路径
+        #return p.sub(url, html_body)  #replace html's img path to remote url.
         return html_body.replace(media, url) # this is ok!
         #return self.string_replace(html_body, media, url) # this is ok, but ulgly
 
@@ -58,9 +58,9 @@ class HtmlProc:
     def init_media_files(self):
         '''Get list of media files path.'''
 
-    	#大小写忽略，也可以用re.I
+        # use re.I to ignore case.
         u.print_t("Get media list...")
-        ##p = re.compile(r'''.*?<.*?IMG.*?src\s*=\s*"(.*?)".*?>.*?''',re.S|re.I)   #some times, this is very slow. #必须有前后的.*
+        ##p = re.compile(r'''.*?<.*?IMG.*?src\s*=\s*"(.*?)".*?>.*?''',re.S|re.I)   #some times, this is very slow.#should use first and last .*
         #p = re.compile(r'''<IMG.*?src="(.*?)".*?>''',re.S|re.I)
         p = re.compile(r'''<IMG.*?src="(.*?)"''',re.S|re.I)
 
@@ -73,16 +73,17 @@ class HtmlProc:
 
     def init_html_content(self, filename):
         u.print_t("Parsing "+filename+" content...")
-        #打开带图的html文件(Unicode编码)
+
+        # open html file, it's Unicode encoding.
         html_file = open(filename, encoding='utf-16')
         html_content = html_file.read()
         html_file.close()
 
-        #删除\r\n和\n, re.S表示.能匹配\n
+        #remove \r\n and \n, re.S indicate that . matches\n
         p = re.compile(r"\r?\n",re.S)
         html_content = p.sub("",html_content)
 
-        #去掉头
+        #remove the head
         p = re.compile(r'.*<TITLE>(.*)</TITLE>(.*<BODY>)?',re.S | re.I)
         m = p.match(html_content)
         if m:
@@ -92,7 +93,7 @@ class HtmlProc:
             self.html_title = filename
             self.html_body = html_content
 
-        #去掉尾
+        #remove the tail
         p = re.compile(r'</BODY>(.*</HTML>)?',re.S | re.I) # if no body, but have html, there will be a problem
         self.html_body = p.sub("",self.html_body)
 

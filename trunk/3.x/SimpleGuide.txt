@@ -1,0 +1,15 @@
+
+
+1、安装Python31，或者直接解压缩我提供的Python31.zip文件到一个非中文、不含空格的路径下，并且把该路径添加到环境变量Path中。
+2、安装BatchBlogPost.
+2、到WizKnowedge插件目录（如：D:\Users\Documents\My Knowledge\Plugins\{A0D025CD-970A-4C62-97E4-5CF6F2C9DD6A}）修改博客服务器配置blogconfig.xml。
+3、然后就可以在WizKnowedge的插件菜单中看到“博文批量发布”菜单了。选中要发布的文件，点这个菜单即可发布。
+
+常见问题：
+1、不能正确执行，多半可能BatchBlogPost.htm中调用BlogPost.py的路径错了。根据你的情况修改一下。
+2、博客服务器没有在参考的blogconfig.xml中出现。可能该服务器还不能支持，但也可能支持，你可以试一下，或者反馈给我。
+
+
+email：sinojelly@163.com
+
+

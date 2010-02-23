@@ -3,11 +3,11 @@
 # python 3.x
 
 
-##Python获取程序所在目录
+##Python get script path
 ##
-##解决__file__或sys.argv[0]在py2exe下失效的问题。
+##solved the problem of __file__ or sys.argv[0] invalid while using py2exe.
 ##
-##选自pathutils模块。
+##from pathutils module
 ##http://www.voidspace.org.uk/python/pathutils.html#get-main-dir
 
 ##############################################################################

@@ -1,5 +1,3 @@
-
-
 import xmlrpc.client
 import sys
 import os
@@ -318,8 +316,7 @@ def main():
 
     return 0
 
-if   __name__  ==  "__main__":
-
+def start():
     try:
         main()
 ##    except xmlrpc.client.ProtocolError as ex:
@@ -336,5 +333,39 @@ if   __name__  ==  "__main__":
         print("Batch publish blog finished at "+u.get_modify_time() +"\n")
         os.system("pause")
 
+# call start() without __name__ == '__main__', so can use cxfreeze to make scripts to a exe.
+start()
+
+##if   __name__  ==  "__main__":
+##
+##    try:
+##        main()
+####    except xmlrpc.client.ProtocolError as ex:
+####        u.print_t(ex)
+####    except:
+####        u.print_t("Unknown exception!")
+##    finally:
+##        print("Please check file("+log_file+") for more infomation.")
+##
+##        #stdout_ = sys.stdout # backup reference to the old stdout.
+##        sys.stdout = mylogger
+##        sys.stderr = mylogger
+##
+##        print("Batch publish blog finished at "+u.get_modify_time() +"\n")
+##        os.system("pause")
+
+
+
+#for testing
+##posturl='https://storage.msn.com/storageservice/MetaWeblog.rpc'
+##username="sinojellycn"
+##password="123456"
+##
+##blog = pyblog.WordPress(posturl, username, password)
+##content = {"description":'Test description6', "title":'Test article6'}#, "categories": u.split_to_list('Python;Test', ';', '')}
+##blog.new_post(content, blogid = "1")
+##print(blog.list_methods2())
+##print(blog.method_signature('metaWeblog.newPost'))
+##print(blog.get_categories("1"))
 
 
