@@ -135,6 +135,8 @@ hr {
     //
     //
     var appGUID = objApp.GetPluginAppGUID(document);
+    //var pluginPath = objApp.GetPluginAppPath(document);
+    //alert(plugin_path);
     //
     //
     var settings_meta = "BatchPublishHtml";
@@ -152,46 +154,28 @@ hr {
         textCategory.value = database.Meta(settings_meta, "Category");
 
     }
-    
-    //////////////////
-    function exec (command)
- 
-  {  
- 
-          window.oldOnError = window.onerror;  
- 
-          window._command = command;  
- 
-          window.onerror = function(err)
- 
-          {  
- 
-              if (err.indexOf('utomation') != -1)
- 
-      {  
- 
-                  alert('命令已经被用户禁止！');    
- 
-                  return true;  
- 
-              }  
- 
-              else return false;  
- 
-          };  
- 
-          var wsh = new ActiveXObject('WScript.Shell');  
- 
-          if (wsh)   {
-                     wsh.Run(command);  
-          }
- 
- 
-          window.onerror = window.oldOnError;
-          //alert(window.oldOnError); 
- 
-  }  
- 
+ 		function GetPluginPath() {
+        var url = document.URL;
+        //
+        if (document.location.protocol == "file:") {
+            var path = unescape(document.location.pathname);
+            path = path.replace(/\//g, "\\");
+            //
+            while (true) {
+                if (path.charAt(0) == '\\')
+                    path = path.substring(1, path.length);
+                else
+                    break;
+            }
+            //
+            var nPos = path.lastIndexOf("\\");
+            if (nPos != -1) {
+                path = path.substring(0, nPos + 1);
+            }
+            //
+            return path;
+        }
+    }
     //
     function PublishDocuments() {    	        
         var category = textCategory.value;
@@ -206,10 +190,13 @@ hr {
         var document_count = selected_documents.Count;
         //
         
-        // jelly: if you see a flash of dos console , probably this tool_dir error.
+        // jelly: if you see a flash of dos console , probably this tool_dir error.  or not install lxml python lib.
         var tool_dir = "%USERPROFILE%\\My Documents\\My Knowledge\\Plugins\\{A0D025CD-970A-4C62-97E4-5CF6F2C9DD6A}";
+        var tool_dir = GetPluginPath(); //pluginPath;
         
-        var param_string = " \""+tool_dir+"\\BlogPost.py\" " + category + " ";
+        
+        //var param_string = " \""+tool_dir+"BlogPost.py\" " + category + " ";
+        var param_string = category + " ";
         for (var i = 0; i < document_count; i++) {
             var wiz_document = selected_documents.Item(i);
             if (null == wiz_document)
@@ -229,7 +216,8 @@ hr {
         }
 
         //exec("python.exe \"D:\\Users\\Documents\\My Knowledge\\Plugins\\{A0D025CD-970A-4C62-97E4-5CF6F2C9DD6A}\\BlogPost.py\" \""+wiz_document.FileName+"\" 1234567890");
-        var ret = objCommon.RunExe("python.exe",param_string, true); 
+        //var ret = objCommon.RunExe("python.exe",param_string, true); 
+        var ret = objCommon.RunExe(tool_dir+"BlogPost.exe",param_string, true); 
         if (0 == ret) {
 					for (var i = 0; i < document_count; i++) {
 		            var wiz_document = selected_documents.Item(i);
@@ -246,12 +234,12 @@ hr {
         }  
         else
         {
-        	  var fso=new ActiveXObject("Scripting.FileSystemObject"); 
+        	  /*var fso=new ActiveXObject("Scripting.FileSystemObject"); 
         		if (!fso.FileExists(tool_dir + "\\BlogPost.py")) 
 						{
 						    alert("Tool("+tool_dir + "\\BlogPost.py) not exist. please modify tool_dir in BatchPublishBlog.htm."); 
 						    return;
-						}
+						}*/
         }
     }
     function CloseDialog(ret) {

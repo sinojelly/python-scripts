@@ -5,7 +5,7 @@
 import lxml.etree
 import XmlProc
 import UserException
-
+import _elementpath as DONTUSE
 
 class BlogConfig:
     def __init__(self, file = None, string = None):
