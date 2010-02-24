@@ -1,5 +1,3 @@
 
-1、修改xmlrpc代码之后能支持cnblogs的文章发布，但是不支持WordPress的分类功能了。
-2、categories功能解决后，估计能支持一大批的博客。
 
 

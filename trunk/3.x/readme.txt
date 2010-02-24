@@ -1,5 +1,5 @@
 博文批量发布工具
-
+(更正式、全面的工具参考文档，请参见《博文批量发布工具使用说明》http://sinojelly.blog.51cto.com/479153/278444)
 
 用Python写的离线批量发布博客文章的工具，又称pyBlogPost，
 支持一次上传到多个服务器；
@@ -43,7 +43,7 @@
 
 配置文件
 ===================
-默认文件名：blogconfig.xml
+文件名：blogconfig.xml
 配置要发布到的博客服务器的相关信息。
 注意：
 1、posturl要指定为xmlrpc.php、metablogapi.aspx、RPC.ashx的完整路径，并且要是自己的博客账户的路径。

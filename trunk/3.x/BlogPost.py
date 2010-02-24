@@ -17,7 +17,7 @@ __copyright__ = "Copyright 2010, Guodong Workshop."
 __version__=["Wei Shijun", "Bao Fanfan"]
 
 __license__ = "New BSD License"
-__version__ = "1.0.1"
+__version__ = "1.0.2"
 __maintainer__ = "Chen Guodong(sinojelly)"
 __email__ = "sinojelly@gmail.com"
 __status__ = "Production"
