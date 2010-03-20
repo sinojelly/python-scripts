@@ -1,0 +1,39 @@
+diff -Nur old\test\test_xmlrpc.py new\test\test_xmlrpc.py
+--- old\test\test_xmlrpc.py	Thu Aug 13 18:30:32 2009
++++ new\test\test_xmlrpc.py	Sat Mar 20 19:39:48 2010
+@@ -478,6 +478,14 @@
+         # This avoids waiting for the socket timeout.
+         self.test_simple1()
+ 
++    def test_call_with_tuple_param(self):
++        def execute(server, methodname, *args):
++            r = getattr(server, methodname)(args) # params become a tuple
++            return r
++        p = xmlrpclib.ServerProxy(URL)
++        r = execute(p, "add", 4,7)
++        self.assertEqual(r, 11)
++
+ # This is a contrived way to make a failure occur on the server side
+ # in order to test the _send_traceback_header flag on the server
+ class FailingMessageClass(http.client.HTTPMessage):
+diff -Nur old\xmlrpc\client.py new\xmlrpc\client.py
+--- old\xmlrpc\client.py	Thu Jun 04 17:11:52 2009
++++ new\xmlrpc\client.py	Sat Mar 20 19:41:03 2010
+@@ -49,6 +49,7 @@
+ # 2003-07-12 gp  Correct marshalling of Faults
+ # 2003-10-31 mvl Add multicall support
+ # 2004-08-20 mvl Bump minimum supported Python version to 2.1
++# 2010-03-20 cgd Avoid to make a tuple to be another tuple(Chenguodong email:sinojelly@gmail.com)
+ #
+ # Copyright (c) 1999-2002 by Secret Labs AB.
+ # Copyright (c) 1999-2002 by Fredrik Lundh.
+@@ -1026,6 +1027,9 @@
+     def __getattr__(self, name):
+         return _Method(self.__send, "%s.%s" % (self.__name, name))
+     def __call__(self, *args):
++        # Fixed by sinojelly: if args[0] is a tuple, should not make it to be another tuple.
++        if len(args) == 1 and type(args[0]) is type(()):
++            args = args[0]
+         return self.__send(self.__name, args)
+ 
+ ##
