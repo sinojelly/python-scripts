@@ -370,15 +370,20 @@ start()
 
 #system test
 ##server_params = [
-##    {"url":"http://www.cnblogs.com/sinojelly/services/metablogapi.aspx",  "username":'sinojelly', "password":'87345465', "encoding":'utf-8'},
-##    {"url":"http://blog.sinojelly.dreamhosters.com/xmlrpc.php",  "username":'admin', "password":'87345465', "encoding":'utf-8'},
-##    {"url":"http://sinojelly.20x.cc/xmlrpc.php",  "username":'admin', "password":'B78b9z24', "encoding":'utf-8'},
-##    {"url":"http://sinojelly.blog.51cto.com/xmlrpc.php",  "username":'sinojelly', "password":'87345465', "encoding":'gb2312'}, # test failure 2010.3.20, but wiz plugin ok.
+####    {"url":"http://www.cnblogs.com/sinojelly/services/metablogapi.aspx",  "username":'sinojelly', "password":'87345465', "encoding":'utf-8'},
+####    {"url":"http://blog.sinojelly.dreamhosters.com/xmlrpc.php",  "username":'admin', "password":'87345465', "encoding":'utf-8'}, #wordpress
+####    {"url":"http://sinojelly.20x.cc/xmlrpc.php",  "username":'admin', "password":'B78b9z24', "encoding":'utf-8'},
+####    {"url":"http://blog.csdn.net/sinojelly/services/MetaBlogApi.aspx", "username":'sinojelly',"password":'87345465', "encoding":'utf-8'}, # 2010.3.21 test OK!
+####    {"url":"http://sinojelly.dreamhosters.com/xmlrpc.php", "username":'admin',"password":'87345465', "encoding":'utf-8'}, #drupal. 2010.3.21 test failure. Blog API module is not configured to support the 1 content type, or you don't have sufficient permissions to post this type of content.
+####    {"url":"http://blog.vsharing.com/RPC.ashx", "username":'sinojelly',"password":'87345465', "encoding":'utf-8'}, #2010.3.21 test failure.  NullReferenceException
+####    {"url":"http://sinojelly.blog.51cto.com/xmlrpc.php",  "username":'sinojelly', "password":'87345465', "encoding":'gb2312'}, # 2010.3.20 test failure. but WizPlugin post successful!
+##
 ##]
 ##i = 0
 ##while i< len(server_params):
+##    print("Begin test post:")
 ##    blog = pyblog.WordPress(server_params[i]['url'], server_params[i]['username'], server_params[i]['password'], server_params[i]['encoding'])
-##    content = {"description":'测试博文发布工具内容', "title":'测试博文发布工具2', "categories": u.split_to_list('Python;Test;Code;【创作类型:原创】;开发技术-Web开发', ';', '')}
+##    content = {"description":'test', "title":'test_title', "categories": u.split_to_list('Python;Test;Code;2050', ';', '')}
 ##    blog.new_post(content, blogid = "1")
 ##    print("Finish:"+str(i))
 ##    i = i + 1
